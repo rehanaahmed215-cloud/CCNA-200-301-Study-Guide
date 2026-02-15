@@ -53,7 +53,6 @@ sudo tee "$CLAB_WRAPPER" > /dev/null << 'WRAPPER'
 docker run --rm -it --privileged \
     --network host \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /etc/hosts:/etc/hosts \
     --pid="host" \
     -w "$(pwd)" \
     -v "$(pwd)":"$(pwd)" \
