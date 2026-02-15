@@ -1,0 +1,53 @@
+name: week09-wireless
+
+# Week 9 is primarily conceptual and Packet Tracer-based.
+# Containerlab cannot simulate wireless networks.
+# This topology provides a wired backbone for practicing the
+# infrastructure that supports wireless (VLANs, DHCP, trunking).
+
+topology:
+  nodes:
+    # Core router (simulating gateway + DHCP for wireless VLANs)
+    router1:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        - ip link set eth1 up
+        - ip link set eth2 up
+        # Corporate VLAN gateway
+        - ip addr add 192.168.10.1/24 dev eth1
+        # Guest VLAN gateway
+        - ip addr add 192.168.20.1/24 dev eth2
+        - sysctl -w net.ipv4.ip_forward=1
+
+    # Corporate VLAN bridge
+    corp-switch:
+      kind: bridge
+
+    # Guest VLAN bridge
+    guest-switch:
+      kind: bridge
+
+    # Simulated corporate wireless client
+    corp-client:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr flush dev eth1
+        - ip addr add 192.168.10.10/24 dev eth1
+        - ip route add default via 192.168.10.1
+
+    # Simulated guest wireless client
+    guest-client:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr flush dev eth1
+        - ip addr add 192.168.20.10/24 dev eth1
+        - ip route add default via 192.168.20.1
+
+  links:
+    - endpoints: ["router1:eth1", "corp-switch:eth1"]
+    - endpoints: ["router1:eth2", "guest-switch:eth1"]
+    - endpoints: ["corp-client:eth1", "corp-switch:eth2"]
+    - endpoints: ["guest-client:eth1", "guest-switch:eth2"]
