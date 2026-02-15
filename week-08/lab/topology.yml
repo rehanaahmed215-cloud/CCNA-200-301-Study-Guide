@@ -1,0 +1,61 @@
+name: week08-security
+
+topology:
+  nodes:
+    # Router with ACL / firewall capabilities
+    router1:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        - ip link set eth1 up
+        - ip link set eth2 up
+        # LAN side
+        - ip addr add 192.168.1.1/24 dev eth1
+        # Server side
+        - ip addr add 192.168.2.1/24 dev eth2
+        - sysctl -w net.ipv4.ip_forward=1
+
+    # LAN switch
+    lan-switch:
+      kind: bridge
+
+    # Server switch
+    server-switch:
+      kind: bridge
+
+    # Client PC
+    pc1:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr flush dev eth1
+        - ip addr add 192.168.1.10/24 dev eth1
+        - ip route add default via 192.168.1.1
+
+    # Client PC 2
+    pc2:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr flush dev eth1
+        - ip addr add 192.168.1.20/24 dev eth1
+        - ip route add default via 192.168.1.1
+
+    # Web server (nginx runs by default in network-multitool)
+    server1:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr flush dev eth1
+        - ip addr add 192.168.2.100/24 dev eth1
+        - ip route add default via 192.168.2.1
+
+  links:
+    # Router to switches
+    - endpoints: ["router1:eth1", "lan-switch:eth1"]
+    - endpoints: ["router1:eth2", "server-switch:eth1"]
+    # PCs to LAN switch
+    - endpoints: ["pc1:eth1", "lan-switch:eth2"]
+    - endpoints: ["pc2:eth1", "lan-switch:eth3"]
+    # Server to server switch
+    - endpoints: ["server1:eth1", "server-switch:eth2"]
