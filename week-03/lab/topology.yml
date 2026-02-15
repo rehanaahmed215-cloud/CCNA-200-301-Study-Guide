@@ -1,0 +1,58 @@
+name: week03
+topology:
+  nodes:
+    # --- Routers (FRRouting) ---
+    r1:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        # LAN-A (IPv6)
+        - ip -6 addr add 2001:db8:a::1/64 dev eth1
+        - ip link set eth1 up
+        # WAN to R2 (IPv6)
+        - ip -6 addr add 2001:db8:ab::1/64 dev eth2
+        - ip link set eth2 up
+        # IPv6 static route to LAN-B via R2
+        - ip -6 route add 2001:db8:b::/64 via 2001:db8:ab::2
+        # Enable IPv6 forwarding
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+
+    r2:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        # WAN to R1 (IPv6)
+        - ip -6 addr add 2001:db8:ab::2/64 dev eth1
+        - ip link set eth1 up
+        # LAN-B (IPv6)
+        - ip -6 addr add 2001:db8:b::1/64 dev eth2
+        - ip link set eth2 up
+        # IPv6 static route to LAN-A via R1
+        - ip -6 route add 2001:db8:a::/64 via 2001:db8:ab::1
+        # Enable IPv6 forwarding
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+
+    # --- Hosts ---
+    hosta:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip -6 addr add 2001:db8:a::10/64 dev eth1
+        - ip link set eth1 up
+        - ip -6 route add default via 2001:db8:a::1
+
+    hostb:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip -6 addr add 2001:db8:b::10/64 dev eth1
+        - ip link set eth1 up
+        - ip -6 route add default via 2001:db8:b::1
+
+  links:
+    # LAN connections
+    - endpoints: ["hosta:eth1", "r1:eth1"]
+    # WAN connection
+    - endpoints: ["r1:eth2", "r2:eth1"]
+    # LAN connection
+    - endpoints: ["hostb:eth1", "r2:eth2"]
