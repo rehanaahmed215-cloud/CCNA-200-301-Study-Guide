@@ -1,0 +1,48 @@
+name: week04
+topology:
+  nodes:
+    # VLAN 10 bridge (simulates VLAN 10)
+    switch-vlan10:
+      kind: bridge
+
+    # VLAN 20 bridge (simulates VLAN 20)
+    switch-vlan20:
+      kind: bridge
+
+    # Hosts in VLAN 10
+    pc1:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 192.168.10.10/24 dev eth1
+        - ip link set eth1 up
+
+    pc2:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 192.168.10.20/24 dev eth1
+        - ip link set eth1 up
+
+    # Hosts in VLAN 20
+    pc3:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 192.168.20.30/24 dev eth1
+        - ip link set eth1 up
+
+    pc4:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 192.168.20.40/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    # VLAN 10: PC1 and PC2 on the same bridge
+    - endpoints: ["pc1:eth1", "switch-vlan10:eth1"]
+    - endpoints: ["pc2:eth1", "switch-vlan10:eth2"]
+    # VLAN 20: PC3 and PC4 on separate bridge
+    - endpoints: ["pc3:eth1", "switch-vlan20:eth1"]
+    - endpoints: ["pc4:eth1", "switch-vlan20:eth2"]
