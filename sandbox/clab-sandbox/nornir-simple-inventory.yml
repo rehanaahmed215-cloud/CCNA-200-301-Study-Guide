@@ -1,0 +1,26 @@
+---
+pc1:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.20.20.7
+pc2:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.20.20.8
+pc3:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.20.20.5
+router:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.20.20.9
+switch:
+    username: 
+    password: 
+    platform: linux
+    hostname: 172.20.20.6

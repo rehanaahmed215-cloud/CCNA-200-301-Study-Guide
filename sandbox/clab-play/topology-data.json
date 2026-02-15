@@ -1,0 +1,338 @@
+{
+  "name": "play",
+  "type": "clab",
+  "clab": {
+    "config": {
+      "prefix": "clab",
+      "mgmt": {
+        "network": "clab",
+        "bridge": "br-66a8c5b76f17",
+        "ipv4-subnet": "172.20.20.0/24",
+        "ipv4-gw": "172.20.20.1",
+        "ipv6-subnet": "3fff:172:20:20::/64",
+        "ipv6-gw": "3fff:172:20:20::1",
+        "external-access": true
+      }
+    }
+  },
+  "ssh-pub-keys": [],
+  "nodes": {
+    "h1": {
+      "index": "0",
+      "shortname": "h1",
+      "longname": "clab-play-h1",
+      "fqdn": "h1.play.io",
+      "group": "",
+      "labdir": "/Users/rehanaahmed/Desktop/CCNA/sandbox/clab-play/h1",
+      "kind": "linux",
+      "image": "wbitt/network-multitool:latest",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.3",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::3",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-66a8c5b76f17",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/Users/rehanaahmed/Desktop/CCNA/sandbox/clab-play/h1",
+        "clab-node-longname": "clab-play-h1",
+        "clab-node-name": "h1",
+        "clab-node-type": "",
+        "clab-owner": "",
+        "clab-topo-file": "/Users/rehanaahmed/Desktop/CCNA/sandbox/topology.yml",
+        "containerlab": "play"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 80,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 11443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 1180,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "h2": {
+      "index": "1",
+      "shortname": "h2",
+      "longname": "clab-play-h2",
+      "fqdn": "h2.play.io",
+      "group": "",
+      "labdir": "/Users/rehanaahmed/Desktop/CCNA/sandbox/clab-play/h2",
+      "kind": "linux",
+      "image": "wbitt/network-multitool:latest",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.5",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::5",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-66a8c5b76f17",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/Users/rehanaahmed/Desktop/CCNA/sandbox/clab-play/h2",
+        "clab-node-longname": "clab-play-h2",
+        "clab-node-name": "h2",
+        "clab-node-type": "",
+        "clab-owner": "",
+        "clab-topo-file": "/Users/rehanaahmed/Desktop/CCNA/sandbox/topology.yml",
+        "containerlab": "play"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 80,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 11443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 1180,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 443,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "h3": {
+      "index": "2",
+      "shortname": "h3",
+      "longname": "clab-play-h3",
+      "fqdn": "h3.play.io",
+      "group": "",
+      "labdir": "/Users/rehanaahmed/Desktop/CCNA/sandbox/clab-play/h3",
+      "kind": "linux",
+      "image": "wbitt/network-multitool:latest",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.2",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::2",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-66a8c5b76f17",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/Users/rehanaahmed/Desktop/CCNA/sandbox/clab-play/h3",
+        "clab-node-longname": "clab-play-h3",
+        "clab-node-name": "h3",
+        "clab-node-type": "",
+        "clab-owner": "",
+        "clab-topo-file": "/Users/rehanaahmed/Desktop/CCNA/sandbox/topology.yml",
+        "containerlab": "play"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 11443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 1180,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 80,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "r1": {
+      "index": "3",
+      "shortname": "r1",
+      "longname": "clab-play-r1",
+      "fqdn": "r1.play.io",
+      "group": "",
+      "labdir": "/Users/rehanaahmed/Desktop/CCNA/sandbox/clab-play/r1",
+      "kind": "linux",
+      "image": "frrouting/frr:latest",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.4",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::4",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-66a8c5b76f17",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/Users/rehanaahmed/Desktop/CCNA/sandbox/clab-play/r1",
+        "clab-node-longname": "clab-play-r1",
+        "clab-node-name": "r1",
+        "clab-node-type": "",
+        "clab-owner": "",
+        "clab-topo-file": "/Users/rehanaahmed/Desktop/CCNA/sandbox/topology.yml",
+        "containerlab": "play"
+      },
+      "port-bindings": [
+      ]
+    },
+    "sw1": {
+      "index": "4",
+      "shortname": "sw1",
+      "longname": "clab-play-sw1",
+      "fqdn": "sw1.play.io",
+      "group": "",
+      "labdir": "/Users/rehanaahmed/Desktop/CCNA/sandbox/clab-play/sw1",
+      "kind": "linux",
+      "image": "wbitt/network-multitool:latest",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.6",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::6",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-66a8c5b76f17",
+        "clab-node-group": "",
+        "clab-node-kind": "linux",
+        "clab-node-lab-dir": "/Users/rehanaahmed/Desktop/CCNA/sandbox/clab-play/sw1",
+        "clab-node-longname": "clab-play-sw1",
+        "clab-node-name": "sw1",
+        "clab-node-type": "",
+        "clab-owner": "",
+        "clab-topo-file": "/Users/rehanaahmed/Desktop/CCNA/sandbox/topology.yml",
+        "containerlab": "play"
+      },
+      "port-bindings": [
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 11443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 1180,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 80,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  },
+  "links": [
+    {
+      "endpoints": {
+        "a": {
+          "node": "h1",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:1a:be:f1",
+          "peer": "z"
+        },
+        "z": {
+          "node": "sw1",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:1e:46:27",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "h2",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:f6:fa:1b",
+          "peer": "z"
+        },
+        "z": {
+          "node": "sw1",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:b5:a5:1a",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "sw1",
+          "interface": "eth3",
+          "mac": "aa:c1:ab:82:bc:1d",
+          "peer": "z"
+        },
+        "z": {
+          "node": "r1",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:7d:1d:f4",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "h3",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:39:d9:7a",
+          "peer": "z"
+        },
+        "z": {
+          "node": "r1",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:85:88:97",
+          "peer": "a"
+        }
+      }
+    }
+  ]
+}

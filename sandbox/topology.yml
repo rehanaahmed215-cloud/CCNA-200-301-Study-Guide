@@ -1,0 +1,59 @@
+name: play
+topology:
+  nodes:
+    # ── Router (FRR) ─────────────────────────────────
+    r1:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        - ip addr add 10.0.1.1/24 dev eth1
+        - ip addr add 10.0.2.1/24 dev eth2
+        - ip link set eth1 up
+        - ip link set eth2 up
+
+    # ── Layer-2 Switch (Linux bridge) ────────────────
+    sw1:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip link add br0 type bridge
+        - ip link set br0 up
+        - ip link set eth1 master br0
+        - ip link set eth2 master br0
+        - ip link set eth3 master br0
+
+    # ── Host 1 ───────────────────────────────────────
+    h1:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.0.1.10/24 dev eth1
+        - ip link set eth1 up
+        - ip route add 10.0.2.0/24 via 10.0.1.1
+
+    # ── Host 2 ───────────────────────────────────────
+    h2:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.0.1.20/24 dev eth1
+        - ip link set eth1 up
+        - ip route add 10.0.2.0/24 via 10.0.1.1
+
+    # ── Host 3 (separate subnet behind router) ──────
+    h3:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.0.2.10/24 dev eth1
+        - ip link set eth1 up
+        - ip route add 10.0.1.0/24 via 10.0.2.1
+
+  links:
+    # h1 & h2 connect to the switch
+    - endpoints: ["h1:eth1", "sw1:eth1"]
+    - endpoints: ["h2:eth1", "sw1:eth2"]
+    # switch uplinks to the router
+    - endpoints: ["sw1:eth3", "r1:eth1"]
+    # h3 on the other side of the router
+    - endpoints: ["h3:eth1", "r1:eth2"]
