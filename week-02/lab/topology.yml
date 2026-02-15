@@ -1,0 +1,113 @@
+name: week02
+topology:
+  nodes:
+    # --- Routers (FRRouting) ---
+    r1:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        # LAN-A interface
+        - ip addr add 192.168.10.1/26 dev eth1
+        - ip link set eth1 up
+        # WAN to R2
+        - ip addr add 10.0.0.1/30 dev eth2
+        - ip link set eth2 up
+        # Static routes to remote subnets
+        - ip route add 192.168.10.64/26 via 10.0.0.2
+        - ip route add 192.168.10.128/26 via 10.0.0.2
+        - ip route add 192.168.10.192/26 via 10.0.0.2
+
+    r2:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        # LAN-B interface
+        - ip addr add 192.168.10.65/26 dev eth1
+        - ip link set eth1 up
+        # WAN to R1
+        - ip addr add 10.0.0.2/30 dev eth2
+        - ip link set eth2 up
+        # WAN to R3
+        - ip addr add 10.0.0.5/30 dev eth3
+        - ip link set eth3 up
+        # Static routes
+        - ip route add 192.168.10.0/26 via 10.0.0.1
+        - ip route add 192.168.10.128/26 via 10.0.0.6
+        - ip route add 192.168.10.192/26 via 10.0.0.6
+
+    r3:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        # LAN-C interface
+        - ip addr add 192.168.10.129/26 dev eth1
+        - ip link set eth1 up
+        # WAN to R2
+        - ip addr add 10.0.0.6/30 dev eth2
+        - ip link set eth2 up
+        # WAN to R4
+        - ip addr add 10.0.0.9/30 dev eth3
+        - ip link set eth3 up
+        # Static routes
+        - ip route add 192.168.10.0/26 via 10.0.0.5
+        - ip route add 192.168.10.64/26 via 10.0.0.5
+        - ip route add 192.168.10.192/26 via 10.0.0.10
+
+    r4:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        # LAN-D interface
+        - ip addr add 192.168.10.193/26 dev eth1
+        - ip link set eth1 up
+        # WAN to R3
+        - ip addr add 10.0.0.10/30 dev eth2
+        - ip link set eth2 up
+        # Static routes
+        - ip route add 192.168.10.0/26 via 10.0.0.9
+        - ip route add 192.168.10.64/26 via 10.0.0.9
+        - ip route add 192.168.10.128/26 via 10.0.0.9
+
+    # --- Hosts ---
+    hosta:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 192.168.10.10/26 dev eth1
+        - ip link set eth1 up
+        - ip route add default via 192.168.10.1
+
+    hostb:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 192.168.10.70/26 dev eth1
+        - ip link set eth1 up
+        - ip route add default via 192.168.10.65
+
+    hostc:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 192.168.10.130/26 dev eth1
+        - ip link set eth1 up
+        - ip route add default via 192.168.10.129
+
+    hostd:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 192.168.10.200/26 dev eth1
+        - ip link set eth1 up
+        - ip route add default via 192.168.10.193
+
+  links:
+    # LAN connections (host to router)
+    - endpoints: ["hosta:eth1", "r1:eth1"]
+    - endpoints: ["hostb:eth1", "r2:eth1"]
+    - endpoints: ["hostc:eth1", "r3:eth1"]
+    - endpoints: ["hostd:eth1", "r4:eth1"]
+    # WAN connections (router to router)
+    - endpoints: ["r1:eth2", "r2:eth2"]
+    - endpoints: ["r2:eth3", "r3:eth2"]
+    - endpoints: ["r3:eth3", "r4:eth2"]
