@@ -22,47 +22,56 @@ Containerlab uses Linux, so ACL concepts are demonstrated with `iptables` (the L
 **Deploy the topology:**
 ```bash
 cd week-08/lab
-sudo containerlab deploy -t topology.yml
+containerlab deploy -t topology.yml
 ```
 
 **Topology:** PC1 → R1 → Server
 
-**Step 1: Verify baseline connectivity**
+> **Tip — Connecting to nodes:**
+> Use `lab <node>` to open a shell inside a container. All commands below assume you are **inside** the container's shell.
+>
+> ```bash
+> lab pc1          # opens a shell on PC1
+> lab router1      # opens a shell on R1
+> lab --all        # opens a tab for every node
+> ```
+
+**On PC1** (`lab pc1`) — verify baseline connectivity:
 ```bash
-docker exec -it clab-week08-pc1 ping -c 3 192.168.2.100
-docker exec -it clab-week08-pc1 curl -s http://192.168.2.100 | head -5
+ping -c 3 192.168.2.100
+curl -s http://192.168.2.100 | head -5
 ```
 
-**Step 2: Block ICMP (ping) from PC1 to Server**
+**On R1** (`lab router1`) — block ICMP (ping) from PC1 to Server:
 ```bash
-docker exec -it clab-week08-router1 iptables -A FORWARD -s 192.168.1.0/24 -d 192.168.2.100 -p icmp -j DROP
+iptables -A FORWARD -s 192.168.1.0/24 -d 192.168.2.100 -p icmp -j DROP
 ```
 
-**Step 3: Test — ping should fail, HTTP should still work**
+**On PC1** — test — ping should fail, HTTP should still work:
 ```bash
-docker exec -it clab-week08-pc1 ping -c 3 192.168.2.100    # FAIL
-docker exec -it clab-week08-pc1 curl -s http://192.168.2.100  # OK
+ping -c 3 192.168.2.100    # FAIL
+curl -s http://192.168.2.100  # OK
 ```
 
-**Step 4: Allow only HTTP (port 80), deny everything else to the server**
+**On R1** — allow only HTTP (port 80), deny everything else to the server:
 ```bash
 # Flush previous rules
-docker exec -it clab-week08-router1 iptables -F FORWARD
+iptables -F FORWARD
 
 # Permit HTTP
-docker exec -it clab-week08-router1 iptables -A FORWARD -s 192.168.1.0/24 -d 192.168.2.100 -p tcp --dport 80 -j ACCEPT
+iptables -A FORWARD -s 192.168.1.0/24 -d 192.168.2.100 -p tcp --dport 80 -j ACCEPT
 
 # Permit return traffic (established connections)
-docker exec -it clab-week08-router1 iptables -A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT
 
 # Deny everything else to server
-docker exec -it clab-week08-router1 iptables -A FORWARD -d 192.168.2.100 -j DROP
+iptables -A FORWARD -d 192.168.2.100 -j DROP
 ```
 
-**Step 5: Verify**
+**On PC1** — verify:
 ```bash
-docker exec -it clab-week08-pc1 curl -s http://192.168.2.100  # OK
-docker exec -it clab-week08-pc1 ping -c 3 192.168.2.100        # BLOCKED
+curl -s http://192.168.2.100  # OK
+ping -c 3 192.168.2.100        # BLOCKED
 ```
 
 **Conceptual mapping:**
@@ -75,9 +84,9 @@ docker exec -it clab-week08-pc1 ping -c 3 192.168.2.100        # BLOCKED
 | `-j ACCEPT` | `permit` |
 | `-j DROP` | `deny` |
 
-**Cleanup:**
+**Cleanup:** Exit all container shells, then from your Mac terminal:
 ```bash
-sudo containerlab destroy -t topology.yml
+lab destroy
 ```
 
 ---

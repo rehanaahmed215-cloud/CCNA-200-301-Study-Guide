@@ -21,36 +21,45 @@
 **Deploy the topology:**
 ```bash
 cd week-07/lab
-sudo containerlab deploy -t topology.yml
+containerlab deploy -t topology.yml
 ```
 
 The topology includes a router (R1) with dnsmasq running as a DHCP server for LAN hosts.
 
-**Step 1: Verify the DHCP server is running on R1**
+> **Tip — Connecting to nodes:**
+> Use `lab <node>` to open a shell inside a container. All commands below assume you are **inside** the container's shell.
+>
+> ```bash
+> lab router1      # opens a shell on R1
+> lab pc1          # opens a shell on PC1
+> lab --all        # opens a tab for every node
+> ```
+
+**On R1** (`lab router1`):
 ```bash
-docker exec -it clab-week07-router1 ps aux | grep dnsmasq
+ps aux | grep dnsmasq
 ```
 
-**Step 2: Check client received an IP**
+**On PC1** (`lab pc1`) — check if client received an IP:
 ```bash
-docker exec -it clab-week07-pc1 ip addr show eth1
+ip addr show eth1
 ```
 The client should have been assigned an IP from the 192.168.1.0/24 pool.
 
-**Step 3: Manually request a DHCP lease (if needed)**
+**On PC1** — manually request a DHCP lease (if needed):
 ```bash
-docker exec -it clab-week07-pc1 dhclient eth1
-docker exec -it clab-week07-pc1 ip addr show eth1
+dhclient eth1
+ip addr show eth1
 ```
 
-**Step 4: Check DHCP leases on the server**
+**On R1** — check DHCP leases on the server:
 ```bash
-docker exec -it clab-week07-router1 cat /var/lib/misc/dnsmasq.leases
+cat /var/lib/misc/dnsmasq.leases
 ```
 
-**Step 5: Verify connectivity**
+**On PC1** — verify connectivity:
 ```bash
-docker exec -it clab-week07-pc1 ping -c 3 192.168.1.1
+ping -c 3 192.168.1.1
 ```
 
 ---
@@ -59,27 +68,24 @@ docker exec -it clab-week07-pc1 ping -c 3 192.168.1.1
 
 This lab demonstrates PAT using Linux iptables (the real-world equivalent of Cisco PAT).
 
-**Step 1: On R1, configure PAT (masquerade)**
+**On R1** (`lab router1`) — configure PAT (masquerade):
 ```bash
-docker exec -it clab-week07-router1 bash
 iptables -t nat -A POSTROUTING -o eth2 -s 192.168.1.0/24 -j MASQUERADE
-exit
 ```
 
-**Step 2: Verify the NAT rule**
+**On R1** — verify the NAT rule:
 ```bash
-docker exec -it clab-week07-router1 iptables -t nat -L -v
+iptables -t nat -L -v
 ```
 
-**Step 3: From PC1, access the "internet" (R1's outside network)**
+**On PC1** (`lab pc1`) — access the "internet" (R1's outside network):
 ```bash
-docker exec -it clab-week07-pc1 ping -c 3 10.0.0.2
+ping -c 3 10.0.0.2
 ```
 
-**Step 4: Watch NAT translations**
+**On R1** — watch NAT translations:
 ```bash
-docker exec -it clab-week07-router1 conntrack -L 2>/dev/null || \
-docker exec -it clab-week07-router1 cat /proc/net/nf_conntrack
+conntrack -L 2>/dev/null || cat /proc/net/nf_conntrack
 ```
 
 **Conceptual mapping to Cisco:**
@@ -90,9 +96,9 @@ docker exec -it clab-week07-router1 cat /proc/net/nf_conntrack
 | `-s 192.168.1.0/24` | `access-list 1 permit 192.168.1.0 0.0.0.255` |
 | `conntrack -L` | `show ip nat translations` |
 
-**Cleanup:**
+**Cleanup:** Exit all container shells, then from your Mac terminal:
 ```bash
-sudo containerlab destroy -t topology.yml
+lab destroy
 ```
 
 ---

@@ -8,8 +8,8 @@ all:
     linux:
       hosts:
         clab-week01-pc1:
-          ansible_host: 172.20.20.3
+          ansible_host: 172.20.20.2
         clab-week01-pc2:
           ansible_host: 172.20.20.4
         clab-week01-switch:
-          ansible_host: 172.20.20.2
+          ansible_host: 172.20.20.3

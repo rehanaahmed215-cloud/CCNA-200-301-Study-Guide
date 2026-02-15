@@ -43,21 +43,26 @@ In this lab, you will:
 
 ```bash
 cd ~/Desktop/CCNA/week-03/lab/
-sudo containerlab deploy -t topology.yml
+containerlab deploy -t topology.yml
 ```
 
 Verify:
 ```bash
-docker ps --format "table {{.Names}}\t{{.Status}}" | grep week03
+lab ls
 ```
+
+> **Tip — Connecting to nodes:**
+> Use `lab <node>` to open a shell inside a container. Open each node in its own Terminal tab, or run `lab --all` to open every node at once.
+>
+> All commands below assume you are **inside** the container's shell unless marked as **Host (Mac terminal)**.
 
 ---
 
 ### Exercise 2: Verify IPv6 Addresses
 
-**Step 1:** Check all addresses on R1
+**On R1** (`lab r1`):
 ```bash
-docker exec -it clab-week03-r1 ip -6 addr show
+ip -6 addr show
 ```
 
 **What to observe:**
@@ -65,41 +70,47 @@ docker exec -it clab-week03-r1 ip -6 addr show
 - Interfaces also have the manually configured **GUA** (2001:db8:...)
 - The loopback has `::1` (IPv6 loopback)
 
-**Step 2:** Check R2
+**On R2** (`lab r2`):
 ```bash
-docker exec -it clab-week03-r2 ip -6 addr show
+ip -6 addr show
 ```
 
-**Step 3:** Check hosts
+**On Host A** (`lab hosta`):
 ```bash
-docker exec clab-week03-hosta ip -6 addr show eth1
-docker exec clab-week03-hostb ip -6 addr show eth1
+ip -6 addr show eth1
+```
+
+**On Host B** (`lab hostb`):
+```bash
+ip -6 addr show eth1
 ```
 
 ---
 
 ### Exercise 3: Test IPv6 Connectivity
 
-**Step 1:** Ping from Host A to R1 (same subnet)
+**On Host A** (`lab hosta`):
+
+**Step 1:** Ping R1 (same subnet)
 ```bash
-docker exec clab-week03-hosta ping6 -c 3 2001:db8:a::1
+ping6 -c 3 2001:db8:a::1
 ```
 
-**Step 2:** Ping from Host A to Host B (across routers)
+**Step 2:** Ping Host B (across routers)
 ```bash
-docker exec clab-week03-hosta ping6 -c 3 2001:db8:b::10
+ping6 -c 3 2001:db8:b::10
 ```
 
 **Step 3:** Ping using link-local (must specify the interface)
 ```bash
-docker exec clab-week03-hosta ping6 -c 3 fe80::1%eth1
+ping6 -c 3 fe80::1%eth1
 ```
 
 > **Note:** Link-local addresses require the `%interface` suffix because they're not unique across interfaces.
 
 **Step 4:** Traceroute
 ```bash
-docker exec clab-week03-hosta traceroute6 2001:db8:b::10
+traceroute6 2001:db8:b::10
 ```
 
 ---
@@ -108,19 +119,21 @@ docker exec clab-week03-hosta traceroute6 2001:db8:b::10
 
 NDP is IPv6's replacement for ARP. Let's watch it in action.
 
+**On Host A:**
+
 **Step 1:** Clear the neighbor cache
 ```bash
-docker exec clab-week03-hosta ip -6 neigh flush all
+ip -6 neigh flush all
 ```
 
-**Step 2:** Start a capture on Host A
+**Step 2:** Start a capture (this will wait for packets):
 ```bash
-docker exec clab-week03-hosta tcpdump -i eth1 -n -c 10 icmp6 &
+tcpdump -i eth1 -n -c 10 icmp6 &
 ```
 
-**Step 3:** Ping R1 from Host A
+**Step 3:** Ping R1
 ```bash
-docker exec clab-week03-hosta ping6 -c 1 2001:db8:a::1
+ping6 -c 1 2001:db8:a::1
 ```
 
 **What to observe in tcpdump:**
@@ -135,21 +148,21 @@ This is the IPv6 equivalent of ARP Request/Reply!
 
 **Step 4:** View the neighbor table (equivalent of ARP table)
 ```bash
-docker exec clab-week03-hosta ip -6 neigh show
+ip -6 neigh show
 ```
 
 ---
 
 ### Exercise 5: View IPv6 Routing Tables
 
-**Step 1:** Check R1's IPv6 routes
+**On R1** (`lab r1`):
 ```bash
-docker exec -it clab-week03-r1 ip -6 route show
+ip -6 route show
 ```
 
-**Step 2:** Check R2's IPv6 routes
+**On R2** (`lab r2`):
 ```bash
-docker exec -it clab-week03-r2 ip -6 route show
+ip -6 route show
 ```
 
 **What to observe:**
@@ -162,47 +175,54 @@ docker exec -it clab-week03-r2 ip -6 route show
 
 Now let's add IPv4 alongside IPv6 on the same interfaces.
 
-**Step 1:** Add IPv4 addresses to all devices
+**On R1** (`lab r1`):
 ```bash
-# R1 — LAN interface
-docker exec clab-week03-r1 ip addr add 192.168.1.1/24 dev eth1
-# R1 — WAN interface
-docker exec clab-week03-r1 ip addr add 10.0.0.1/30 dev eth2
-
-# R2 — WAN interface
-docker exec clab-week03-r2 ip addr add 10.0.0.2/30 dev eth1
-# R2 — LAN interface
-docker exec clab-week03-r2 ip addr add 192.168.2.1/24 dev eth2
-
-# Host A
-docker exec clab-week03-hosta ip addr add 192.168.1.10/24 dev eth1
-docker exec clab-week03-hosta ip route add 192.168.2.0/24 via 192.168.1.1
-
-# Host B
-docker exec clab-week03-hostb ip addr add 192.168.2.10/24 dev eth1
-docker exec clab-week03-hostb ip route add 192.168.1.0/24 via 192.168.2.1
+ip addr add 192.168.1.1/24 dev eth1
+ip addr add 10.0.0.1/30 dev eth2
 ```
 
-**Step 2:** Add IPv4 static routes on routers
+**On R2** (`lab r2`):
 ```bash
-docker exec clab-week03-r1 ip route add 192.168.2.0/24 via 10.0.0.2
-docker exec clab-week03-r2 ip route add 192.168.1.0/24 via 10.0.0.1
+ip addr add 10.0.0.2/30 dev eth1
+ip addr add 192.168.2.1/24 dev eth2
 ```
 
-**Step 3:** Test both protocols
+**On Host A** (`lab hosta`):
+```bash
+ip addr add 192.168.1.10/24 dev eth1
+ip route add 192.168.2.0/24 via 192.168.1.1
+```
+
+**On Host B** (`lab hostb`):
+```bash
+ip addr add 192.168.2.10/24 dev eth1
+ip route add 192.168.1.0/24 via 192.168.2.1
+```
+
+**On R1** — add IPv4 static route:
+```bash
+ip route add 192.168.2.0/24 via 10.0.0.2
+```
+
+**On R2** — add IPv4 static route:
+```bash
+ip route add 192.168.1.0/24 via 10.0.0.1
+```
+
+**On Host A** — test both protocols:
 ```bash
 # IPv4 ping
-docker exec clab-week03-hosta ping -c 2 192.168.2.10
+ping -c 2 192.168.2.10
 
 # IPv6 ping
-docker exec clab-week03-hosta ping6 -c 2 2001:db8:b::10
+ping6 -c 2 2001:db8:b::10
 ```
 
 **Both should work!** This is dual-stack — the same interfaces carry both IPv4 and IPv6 traffic simultaneously.
 
-**Step 4:** Verify dual-stack addresses
+**On Host A** — verify dual-stack addresses:
 ```bash
-docker exec clab-week03-hosta ip addr show eth1
+ip addr show eth1
 ```
 You should see both an `inet` (IPv4) and `inet6` (IPv6) address on the same interface.
 
@@ -210,9 +230,10 @@ You should see both an `inet` (IPv4) and `inet6` (IPv6) address on the same inte
 
 ### Exercise 7: Clean Up
 
+Exit all container shells (type `exit`), then from your Mac terminal:
 ```bash
 cd ~/Desktop/CCNA/week-03/lab/
-sudo containerlab destroy -t topology.yml
+lab destroy
 ```
 
 ---

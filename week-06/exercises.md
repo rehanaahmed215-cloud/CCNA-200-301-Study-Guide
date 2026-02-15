@@ -21,7 +21,7 @@
 **Deploy the topology:**
 ```bash
 cd week-06/lab
-sudo containerlab deploy -t topology.yml
+containerlab deploy -t topology.yml
 ```
 
 **Topology:** R1 — R2 — R3 (linear chain), each with a LAN host.
@@ -33,16 +33,22 @@ PC1 ── R1 ─── R2 ─── R3 ── PC3
 LAN:192.168.1.0 LAN:192.168.2.0 LAN:192.168.3.0
 ```
 
-**Step 1: Verify connected routes on R1**
-```bash
-docker exec -it clab-week06-router1 vtysh
-```
+> **Tip — Connecting to nodes:**
+> Use `lab <node>` to open a shell inside a container. For routers, the shell drops you into bash — type `vtysh` to enter FRR's CLI. All commands below assume you are **inside** the container's shell.
+>
+> ```bash
+> lab router1      # opens a shell on R1
+> lab pc1          # opens a shell on PC1
+> lab --all        # opens a tab for every node
+> ```
+
+**On R1** (`lab router1` → then type `vtysh`):
 ```
 show ip route
 ```
 You should see `C` (connected) routes for 192.168.1.0/24 and 10.0.12.0/30.
 
-**Step 2: Configure static routes on R1**
+**Configure static routes on R1** (still in vtysh):
 ```
 configure terminal
 ip route 192.168.2.0/24 10.0.12.2
@@ -51,7 +57,7 @@ end
 show ip route static
 ```
 
-**Step 3: Configure static routes on R2**
+**On R2** (`lab router2` → `vtysh`):
 ```
 configure terminal
 ip route 192.168.1.0/24 10.0.12.1
@@ -59,7 +65,7 @@ ip route 192.168.3.0/24 10.0.23.2
 end
 ```
 
-**Step 4: Configure static routes on R3**
+**On R3** (`lab router3` → `vtysh`):
 ```
 configure terminal
 ip route 192.168.1.0/24 10.0.23.1
@@ -67,33 +73,52 @@ ip route 192.168.2.0/24 10.0.23.1
 end
 ```
 
-**Step 5: Test end-to-end connectivity**
+**On PC1** (`lab pc1`) — test end-to-end connectivity:
 ```bash
-docker exec -it clab-week06-pc1 ping -c 3 192.168.3.10
-docker exec -it clab-week06-pc3 ping -c 3 192.168.1.10
+ping -c 3 192.168.3.10
 ```
 
-**Step 6: Trace the path**
+**On PC3** (`lab pc3`):
 ```bash
-docker exec -it clab-week06-pc1 traceroute 192.168.3.10
+ping -c 3 192.168.1.10
+```
+
+**On PC1** — trace the path:
+```bash
+traceroute 192.168.3.10
 ```
 
 ---
 
 ### Lab CL-2: Single-Area OSPF
 
-**Step 1: Remove static routes from all routers**
+**On each router** (R1, R2, R3) — enter `vtysh` and remove static routes:
 
-On each router (R1, R2, R3):
+**On R1** (in vtysh):
 ```
 configure terminal
 no ip route 192.168.2.0/24 10.0.12.2
 no ip route 192.168.3.0/24 10.0.12.2
-! (remove all static routes added previously)
 end
 ```
 
-**Step 2: Configure OSPF on R1**
+**On R2** (in vtysh):
+```
+configure terminal
+no ip route 192.168.1.0/24 10.0.12.1
+no ip route 192.168.3.0/24 10.0.23.2
+end
+```
+
+**On R3** (in vtysh):
+```
+configure terminal
+no ip route 192.168.1.0/24 10.0.23.1
+no ip route 192.168.2.0/24 10.0.23.1
+end
+```
+
+**On R1** — configure OSPF (in vtysh):
 ```
 configure terminal
 router ospf
@@ -103,7 +128,7 @@ router ospf
 end
 ```
 
-**Step 3: Configure OSPF on R2**
+**On R2** (in vtysh):
 ```
 configure terminal
 router ospf
@@ -114,7 +139,7 @@ router ospf
 end
 ```
 
-**Step 4: Configure OSPF on R3**
+**On R3** (in vtysh):
 ```
 configure terminal
 router ospf
@@ -124,34 +149,34 @@ router ospf
 end
 ```
 
-**Step 5: Verify OSPF neighbors**
+**On any router** (in vtysh) — verify OSPF neighbors:
 ```
 show ip ospf neighbor
 ```
 Expected: R1 sees R2 as Full, R2 sees R1 and R3, R3 sees R2.
 
-**Step 6: Verify OSPF routes**
+**Verify OSPF routes** (in vtysh):
 ```
 show ip route ospf
 ```
 R1 should show O routes for 192.168.2.0/24 and 192.168.3.0/24.
 
-**Step 7: Test connectivity (same as before)**
+**On PC1** (`lab pc1`) — test connectivity:
 ```bash
-docker exec -it clab-week06-pc1 ping -c 3 192.168.3.10
+ping -c 3 192.168.3.10
 ```
 
 ---
 
 ### Lab CL-3: OSPF Cost Manipulation
 
-**Step 1: Check current OSPF cost on R1**
+**On R1** (in vtysh) — check current OSPF cost:
 ```
 show ip ospf interface
 ```
 Note the cost for each interface.
 
-**Step 2: Manually change cost on R2's link to R3**
+**On R2** (in vtysh) — manually change cost:
 ```
 configure terminal
 interface eth2
@@ -159,21 +184,21 @@ interface eth2
 end
 ```
 
-**Step 3: On R1, check how routing changed**
+**On R1** (in vtysh) — check how routing changed:
 ```
 show ip route ospf
 ```
 If there's an alternate path, the cost increase should route traffic differently. In our linear topology, the path is the same but the metric (cost) should increase.
 
-**Step 4: Verify the metric change**
+**Verify the metric change** (in vtysh):
 ```
 show ip route 192.168.3.0/24
 ```
 The total cost should now be higher (original cost + 100 instead of original cost).
 
-**Cleanup:**
+**Cleanup:** Exit all container shells, then from your Mac terminal:
 ```bash
-sudo containerlab destroy -t topology.yml
+lab destroy
 ```
 
 ---

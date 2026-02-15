@@ -28,9 +28,9 @@
       "image": "wbitt/network-multitool:latest",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.3",
+      "mgmt-ipv4-address": "172.20.20.2",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "3fff:172:20:20::3",
+      "mgmt-ipv6-address": "3fff:172:20:20::2",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
@@ -49,18 +49,6 @@
         {
           "host-ip": "",
           "host-port": 0,
-          "port": 443,
-          "protocol": "tcp"
-        },
-        {
-          "host-ip": "",
-          "host-port": 0,
-          "port": 80,
-          "protocol": "tcp"
-        },
-        {
-          "host-ip": "",
-          "host-port": 0,
           "port": 11443,
           "protocol": "tcp"
         },
@@ -68,6 +56,18 @@
           "host-ip": "",
           "host-port": 0,
           "port": 1180,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 80,
           "protocol": "tcp"
         }
       ]
@@ -104,6 +104,12 @@
         {
           "host-ip": "",
           "host-port": 0,
+          "port": 80,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
           "port": 11443,
           "protocol": "tcp"
         },
@@ -117,12 +123,6 @@
           "host-ip": "",
           "host-port": 0,
           "port": 443,
-          "protocol": "tcp"
-        },
-        {
-          "host-ip": "",
-          "host-port": 0,
-          "port": 80,
           "protocol": "tcp"
         }
       ]
@@ -138,9 +138,9 @@
       "image": "wbitt/network-multitool:latest",
       "mgmt-net": "",
       "mgmt-intf": "",
-      "mgmt-ipv4-address": "172.20.20.2",
+      "mgmt-ipv4-address": "172.20.20.3",
       "mgmt-ipv4-prefix-length": 24,
-      "mgmt-ipv6-address": "3fff:172:20:20::2",
+      "mgmt-ipv6-address": "3fff:172:20:20::3",
       "mgmt-ipv6-prefix-length": 64,
       "mac-address": "",
       "labels": {
@@ -159,18 +159,6 @@
         {
           "host-ip": "",
           "host-port": 0,
-          "port": 80,
-          "protocol": "tcp"
-        },
-        {
-          "host-ip": "",
-          "host-port": 0,
-          "port": 11443,
-          "protocol": "tcp"
-        },
-        {
-          "host-ip": "",
-          "host-port": 0,
           "port": 1180,
           "protocol": "tcp"
         },
@@ -178,6 +166,18 @@
           "host-ip": "",
           "host-port": 0,
           "port": 443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 80,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 11443,
           "protocol": "tcp"
         }
       ]
@@ -189,13 +189,13 @@
         "a": {
           "node": "pc1",
           "interface": "eth1",
-          "mac": "aa:c1:ab:f7:ad:b2",
+          "mac": "aa:c1:ab:38:a4:c1",
           "peer": "z"
         },
         "z": {
           "node": "switch",
           "interface": "eth1",
-          "mac": "aa:c1:ab:bf:ca:e7",
+          "mac": "aa:c1:ab:06:ec:0a",
           "peer": "a"
         }
       }
@@ -205,13 +205,13 @@
         "a": {
           "node": "pc2",
           "interface": "eth1",
-          "mac": "aa:c1:ab:fa:7e:f8",
+          "mac": "aa:c1:ab:c5:91:42",
           "peer": "z"
         },
         "z": {
           "node": "switch",
           "interface": "eth2",
-          "mac": "aa:c1:ab:c9:8b:84",
+          "mac": "aa:c1:ab:f8:ba:96",
           "peer": "a"
         }
       }

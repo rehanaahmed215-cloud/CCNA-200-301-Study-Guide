@@ -3,7 +3,7 @@ pc1:
     username: 
     password: 
     platform: linux
-    hostname: 172.20.20.3
+    hostname: 172.20.20.2
 pc2:
     username: 
     password: 
@@ -13,4 +13,4 @@ switch:
     username: 
     password: 
     platform: linux
-    hostname: 172.20.20.2
+    hostname: 172.20.20.3

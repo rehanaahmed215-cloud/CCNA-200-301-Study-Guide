@@ -52,31 +52,41 @@ This simulates inter-VLAN routing using FRR as the router and separate bridges p
 
 ```bash
 cd ~/Desktop/CCNA/week-05/lab/
-sudo containerlab deploy -t topology.yml
+containerlab deploy -t topology.yml
 ```
+
+> **Tip — Connecting to nodes:**
+> Use `lab <node>` to open a shell inside a container. All commands below assume you are **inside** the container's shell.
+>
+> ```bash
+> lab router       # opens a shell on the router
+> lab pc1          # opens a shell on PC1
+> lab --all        # opens a tab for every node
+> ```
 
 ### Exercise 2: Verify Inter-VLAN Routing
 
-**Step 1:** Check router interfaces
+**On the router** (`lab router`):
 ```bash
-docker exec -it clab-week05-router ip addr show
+ip addr show
 ```
 
-**Step 2:** Ping from PC1 (VLAN 10) to PC2 (VLAN 20)
+**On PC1** (`lab pc1`):
 ```bash
-docker exec clab-week05-pc1 ping -c 3 192.168.20.10
+# Ping PC2 (VLAN 20) from PC1 (VLAN 10)
+ping -c 3 192.168.20.10
 ```
 
-**Step 3:** Traceroute to see the router hop
+**On PC1** — traceroute to see the router hop:
 ```bash
-docker exec clab-week05-pc1 traceroute 192.168.20.10
+traceroute 192.168.20.10
 ```
 
 **What to observe:** The packet goes PC1 → Router (192.168.10.1) → PC2. The router is the gateway between VLANs.
 
-**Step 4:** Check the router's routing table
+**On the router** — check the routing table:
 ```bash
-docker exec -it clab-week05-router ip route
+ip route
 ```
 
 You should see connected routes for both 192.168.10.0/24 and 192.168.20.0/24.
@@ -85,21 +95,25 @@ You should see connected routes for both 192.168.10.0/24 and 192.168.20.0/24.
 
 In this exercise, we replace the router with a Linux host that has both interfaces — simulating how an L3 switch routes between VLANs internally.
 
+**On PC1** (`lab pc1`):
 ```bash
 # The router already has both subnets — it IS functioning as an L3 device
-# Verify by pinging from each PC to the router's other interface
+# Ping the router's VLAN 20 interface
+ping -c 2 192.168.20.1
+```
 
-# From PC1, ping the router's VLAN 20 interface
-docker exec clab-week05-pc1 ping -c 2 192.168.20.1
-
-# From PC2, ping the router's VLAN 10 interface
-docker exec clab-week05-pc2 ping -c 2 192.168.10.1
+**On PC2** (`lab pc2`):
+```bash
+# Ping the router's VLAN 10 interface
+ping -c 2 192.168.10.1
 ```
 
 ### Exercise 4: Clean Up
+
+Exit all container shells (type `exit`), then from your Mac terminal:
 ```bash
 cd ~/Desktop/CCNA/week-05/lab/
-sudo containerlab destroy -t topology.yml
+lab destroy
 ```
 
 ---

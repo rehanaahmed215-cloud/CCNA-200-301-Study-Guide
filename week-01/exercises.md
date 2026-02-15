@@ -46,44 +46,42 @@ cd ~/Desktop/CCNA/week-01/lab/
 
 **Step 2:** Deploy the topology
 ```bash
-sudo containerlab deploy -t topology.yml
+containerlab deploy -t topology.yml
 ```
 
 **Step 3:** Verify containers are running
 ```bash
-docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Image}}"
+lab ls
 ```
 
 You should see three containers: `clab-week01-pc1`, `clab-week01-switch`, `clab-week01-pc2`.
+
+> **Tip — Connecting to nodes:**
+> Use `lab <node>` to open a shell inside a container. Open each node in its own Terminal tab so you can work inside them directly. You can also run `lab --all` to open every node at once.
+>
+> ```bash
+> lab pc1          # opens a shell on PC1
+> lab pc2          # opens a shell on PC2 (in another tab)
+> lab --all        # opens a tab for every node
+> ```
+> All commands below assume you are **inside** the container's shell.
 
 ---
 
 ### Exercise 2: Configure IP Addresses
 
-**Step 1:** Assign IP to PC1
+**On PC1** (`lab pc1`):
 ```bash
-docker exec -it clab-week01-pc1 sh -c "
-  ip addr add 192.168.1.10/24 dev eth1
-  ip link set eth1 up
-  echo 'PC1 configured:'
-  ip addr show eth1
-"
+ip addr add 192.168.1.10/24 dev eth1
+ip link set eth1 up
+ip addr show eth1
 ```
 
-**Step 2:** Assign IP to PC2
+**On PC2** (`lab pc2`):
 ```bash
-docker exec -it clab-week01-pc2 sh -c "
-  ip addr add 192.168.1.20/24 dev eth1
-  ip link set eth1 up
-  echo 'PC2 configured:'
-  ip addr show eth1
-"
-```
-
-**Step 3:** Verify configuration on both hosts
-```bash
-docker exec clab-week01-pc1 ip addr show eth1
-docker exec clab-week01-pc2 ip addr show eth1
+ip addr add 192.168.1.20/24 dev eth1
+ip link set eth1 up
+ip addr show eth1
 ```
 
 **What to observe:**
@@ -94,9 +92,9 @@ docker exec clab-week01-pc2 ip addr show eth1
 
 ### Exercise 3: Test Connectivity with Ping (ICMP — Layer 3)
 
-**Step 1:** Ping PC2 from PC1
+**On PC1:**
 ```bash
-docker exec clab-week01-pc1 ping -c 4 192.168.1.20
+ping -c 4 192.168.1.20
 ```
 
 **Expected output:**
@@ -112,9 +110,9 @@ PING 192.168.1.20 (192.168.1.20): 56 data bytes
 - `ttl=64` — Time to Live, decremented by each router hop
 - `time=0.123 ms` — round-trip time
 
-**Step 2:** Ping in the other direction
+**On PC2** (ping in the other direction):
 ```bash
-docker exec clab-week01-pc2 ping -c 4 192.168.1.10
+ping -c 4 192.168.1.10
 ```
 
 ---
@@ -123,20 +121,24 @@ docker exec clab-week01-pc2 ping -c 4 192.168.1.10
 
 ARP resolves IP addresses to MAC addresses. Let's watch it happen.
 
-**Step 1:** Clear ARP caches on both hosts
+**On PC1:**
 ```bash
-docker exec clab-week01-pc1 ip neigh flush all
-docker exec clab-week01-pc2 ip neigh flush all
+ip neigh flush all
 ```
 
-**Step 2:** Start a packet capture on PC1 (run in a separate terminal)
+**On PC2:**
 ```bash
-docker exec clab-week01-pc1 tcpdump -i eth1 -n -c 10 arp or icmp
+ip neigh flush all
 ```
 
-**Step 3:** In another terminal, ping from PC1 to PC2
+**On PC1** — start a packet capture (this will wait for packets):
 ```bash
-docker exec clab-week01-pc1 ping -c 1 192.168.1.20
+tcpdump -i eth1 -n -c 10 arp or icmp
+```
+
+**On PC1** (open a second tab with `lab pc1`) — trigger ARP + ICMP:
+```bash
+ping -c 1 192.168.1.20
 ```
 
 **What you should see in the tcpdump output:**
@@ -155,9 +157,9 @@ ICMP echo reply
 5. The ICMP packet is encapsulated in an Ethernet frame — **Layer 2**
 6. The frame is sent as bits on the wire — **Layer 1**
 
-**Step 4:** View the ARP table
+**On PC1** — view the ARP table:
 ```bash
-docker exec clab-week01-pc1 ip neigh show
+ip neigh show
 ```
 You should see `192.168.1.20` mapped to PC2's MAC address.
 
@@ -165,19 +167,19 @@ You should see `192.168.1.20` mapped to PC2's MAC address.
 
 ### Exercise 5: Observe TCP Three-Way Handshake (Layer 4)
 
-**Step 1:** Start a simple TCP server on PC2 (listening on port 8080)
+**On PC2** — start a simple TCP server (listening on port 8080):
 ```bash
-docker exec -d clab-week01-pc2 sh -c "while true; do echo 'HTTP/1.1 200 OK\n\nHello from PC2' | nc -l -p 8080; done"
+while true; do echo -e 'HTTP/1.1 200 OK\n\nHello from PC2' | nc -l -p 8080; done &
 ```
 
-**Step 2:** Capture TCP packets on PC2
+**On PC2** — capture TCP packets:
 ```bash
-docker exec clab-week01-pc2 tcpdump -i eth1 -n -c 20 port 8080 &
+tcpdump -i eth1 -n -c 20 port 8080 &
 ```
 
-**Step 3:** Connect from PC1 using TCP
+**On PC1** — connect using TCP:
 ```bash
-docker exec clab-week01-pc1 sh -c "echo 'GET / HTTP/1.0\n\n' | nc -w 2 192.168.1.20 8080"
+echo -e 'GET / HTTP/1.0\n\n' | nc -w 2 192.168.1.20 8080
 ```
 
 **What to observe in tcpdump:**
@@ -195,13 +197,13 @@ Flags [F.]     ← FIN (Connection teardown)
 
 ### Exercise 6: Examine Encapsulation with tcpdump
 
-**Step 1:** Do a detailed capture showing all layers
+**On PC1** — start a detailed capture, then ping:
 ```bash
-docker exec clab-week01-pc1 tcpdump -i eth1 -n -c 5 -XX icmp &
-docker exec clab-week01-pc1 ping -c 2 192.168.1.20
+tcpdump -i eth1 -n -c 5 -XX icmp &
+ping -c 2 192.168.1.20
 ```
 
-**Step 2:** Analyze the output
+**Analyze the output:**
 
 The `-XX` flag shows the raw hex and ASCII of each packet. You'll see:
 - **Bytes 0-13:** Ethernet header (Destination MAC, Source MAC, EtherType 0x0800 = IPv4) — **Layer 2**
@@ -214,9 +216,10 @@ This is encapsulation in action: `[Ethernet Frame [IP Packet [ICMP Data]]]`
 
 ### Exercise 7: Clean Up
 
+Exit all container shells (type `exit`), then from your Mac terminal:
 ```bash
 cd ~/Desktop/CCNA/week-01/lab/
-sudo containerlab destroy -t topology.yml
+lab destroy
 ```
 
 ---

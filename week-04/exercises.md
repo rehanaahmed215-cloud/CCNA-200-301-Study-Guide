@@ -37,7 +37,7 @@ In this lab, you will:
 
 ```bash
 cd ~/Desktop/CCNA/week-04/lab/
-sudo containerlab deploy -t topology.yml
+containerlab deploy -t topology.yml
 ```
 
 Our topology: 4 hosts connected to a Linux bridge (acting as a switch).
@@ -54,36 +54,49 @@ Our topology: 4 hosts connected to a Linux bridge (acting as a switch).
          192.168.1.0/24
 ```
 
+> **Tip — Connecting to nodes:**
+> Use `lab <node>` to open a shell inside a container. All commands below assume you are **inside** the container's shell unless marked as **Host (Mac terminal)**.
+>
+> ```bash
+> lab pc1          # opens a shell on PC1
+> lab switch       # opens a shell on the switch
+> lab --all        # opens a tab for every node
+> ```
+
 ### Exercise 2: Observe Switch MAC Learning
 
-**Step 1:** Check the bridge's MAC table (forwarding database)
+**On the switch** (`lab switch`):
 ```bash
-docker exec clab-week04-switch bridge fdb show
+bridge fdb show
 ```
 
-**Step 2:** Ping from PC1 to PC2
+**On PC1** (`lab pc1`):
 ```bash
-docker exec clab-week04-pc1 ping -c 2 192.168.1.20
+ping -c 2 192.168.1.20
 ```
 
-**Step 3:** Check the MAC table again
+**On the switch** — check the MAC table again:
 ```bash
-docker exec clab-week04-switch bridge fdb show | grep -v permanent
+bridge fdb show | grep -v permanent
 ```
 
 **What to observe:** New entries appear showing which MAC addresses were learned on which ports.
 
 ### Exercise 3: Observe Broadcast Flooding
 
-**Step 1:** Start tcpdump on PC3 and PC4
+**On PC3** (`lab pc3`):
 ```bash
-docker exec clab-week04-pc3 tcpdump -i eth1 -n -c 5 &
-docker exec clab-week04-pc4 tcpdump -i eth1 -n -c 5 &
+tcpdump -i eth1 -n -c 5 &
 ```
 
-**Step 2:** Send a broadcast ping from PC1
+**On PC4** (`lab pc4`):
 ```bash
-docker exec clab-week04-pc1 ping -c 1 -b 192.168.1.255
+tcpdump -i eth1 -n -c 5 &
+```
+
+**On PC1** (`lab pc1`):
+```bash
+ping -c 1 -b 192.168.1.255
 ```
 
 **What to observe:** PC3 and PC4 both see the broadcast — this is switch flooding behavior. All ports in the same broadcast domain receive broadcasts.
@@ -92,22 +105,23 @@ docker exec clab-week04-pc1 ping -c 1 -b 192.168.1.255
 
 We'll create two separate bridges to simulate two VLANs.
 
-**Step 1:** This is pre-configured in the topology. Check:
+**On PC1** (`lab pc1`) — this is pre-configured in the topology. Verify:
 ```bash
 # PC1 and PC2 should be able to ping (same "VLAN")
-docker exec clab-week04-pc1 ping -c 2 192.168.1.20
+ping -c 2 192.168.1.20
 
 # PC1 and PC3 will NOT be able to ping if on separate bridges
-docker exec clab-week04-pc1 ping -c 2 192.168.1.30
+ping -c 2 192.168.1.30
 ```
 
 **Key insight:** VLANs create separate broadcast domains. Without a router, hosts in different VLANs cannot communicate — just like separate physical switches.
 
 ### Exercise 5: Clean Up
 
+Exit all container shells (type `exit`), then from your Mac terminal:
 ```bash
 cd ~/Desktop/CCNA/week-04/lab/
-sudo containerlab destroy -t topology.yml
+lab destroy
 ```
 
 ---

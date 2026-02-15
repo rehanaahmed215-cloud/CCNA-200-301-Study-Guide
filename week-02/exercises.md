@@ -76,39 +76,66 @@ cd ~/Desktop/CCNA/week-02/lab/
 
 **Step 2:** Deploy the topology
 ```bash
-sudo containerlab deploy -t topology.yml
+containerlab deploy -t topology.yml
 ```
 
 **Step 3:** Verify all containers are running
 ```bash
-docker ps --format "table {{.Names}}\t{{.Status}}" | grep week02
+lab ls
 ```
+
+> **Tip — Connecting to nodes:**
+> Use `lab <node>` to open a shell inside a container. Open each node in its own Terminal tab. You can also run `lab --all` to open every node at once.
+>
+> ```bash
+> lab r1           # opens a shell on Router 1
+> lab hosta        # opens a shell on Host A
+> lab --all        # opens a tab for every node
+> ```
+> All commands below assume you are **inside** the container's shell unless marked as **Host (Mac terminal)**.
 
 ---
 
 ### Exercise 3: Verify IP Configuration
 
-**Step 1:** Check IP addresses on each router
+**On R1** (`lab r1`):
 ```bash
-# Router 1
-docker exec -it clab-week02-r1 vtysh -c "show interface brief"
-
-# Router 2
-docker exec -it clab-week02-r2 vtysh -c "show interface brief"
-
-# Router 3
-docker exec -it clab-week02-r3 vtysh -c "show interface brief"
-
-# Router 4
-docker exec -it clab-week02-r4 vtysh -c "show interface brief"
+vtysh -c "show interface brief"
 ```
 
-**Step 2:** Check IP addresses on hosts
+**On R2** (`lab r2`):
 ```bash
-docker exec clab-week02-hosta ip addr show eth1
-docker exec clab-week02-hostb ip addr show eth1
-docker exec clab-week02-hostc ip addr show eth1
-docker exec clab-week02-hostd ip addr show eth1
+vtysh -c "show interface brief"
+```
+
+**On R3** (`lab r3`):
+```bash
+vtysh -c "show interface brief"
+```
+
+**On R4** (`lab r4`):
+```bash
+vtysh -c "show interface brief"
+```
+
+**On Host A** (`lab hosta`):
+```bash
+ip addr show eth1
+```
+
+**On Host B** (`lab hostb`):
+```bash
+ip addr show eth1
+```
+
+**On Host C** (`lab hostc`):
+```bash
+ip addr show eth1
+```
+
+**On Host D** (`lab hostd`):
+```bash
+ip addr show eth1
 ```
 
 **What to observe:**
@@ -119,43 +146,41 @@ docker exec clab-week02-hostd ip addr show eth1
 
 ### Exercise 4: Verify Routing Tables
 
-**Step 1:** Check the routing table on R1
+**On R1** — check the routing table:
 ```bash
-docker exec -it clab-week02-r1 vtysh -c "show ip route"
+vtysh -c "show ip route"
 ```
 
 **Expected:** You should see:
 - **C** (Connected) routes for directly connected subnets
 - **S** (Static) routes for remote subnets
 
-**Step 2:** Check all routers
+**On each router** (R1 through R4) — repeat the same command:
 ```bash
-for r in r1 r2 r3 r4; do
-  echo "=== $r routing table ==="
-  docker exec -it clab-week02-$r vtysh -c "show ip route"
-  echo ""
-done
+vtysh -c "show ip route"
 ```
 
 ---
 
 ### Exercise 5: Test Connectivity Across Subnets
 
+**On Host A** (`lab hosta`):
+
 **Step 1:** Ping between adjacent subnets
 ```bash
 # Host A → Host B (through R1 and R2)
-docker exec clab-week02-hosta ping -c 3 192.168.10.70
+ping -c 3 192.168.10.70
 ```
 
 **Step 2:** Ping across multiple routers
 ```bash
 # Host A → Host D (through R1, R2, R3, R4)
-docker exec clab-week02-hosta ping -c 3 192.168.10.200
+ping -c 3 192.168.10.200
 ```
 
 **Step 3:** Traceroute to see the path
 ```bash
-docker exec clab-week02-hosta traceroute 192.168.10.200
+traceroute 192.168.10.200
 ```
 
 **What to observe:**
@@ -166,32 +191,35 @@ docker exec clab-week02-hosta traceroute 192.168.10.200
 
 ### Exercise 6: Observe Subnetting in Action
 
-**Step 1:** Try pinging a host in a different subnet directly (from a host, not through the router):
+**On Host A:**
+
+**Step 1:** Ping Host B's IP — this will work because the router forwards it:
 ```bash
-# From Host A, ping Host B's IP — this will work because the router forwards it
-docker exec clab-week02-hosta ping -c 2 192.168.10.70
+ping -c 2 192.168.10.70
 ```
 
-**Step 2:** Now remove the default gateway from Host A and try again:
+**Step 2:** Remove the default gateway and try again:
 ```bash
-docker exec clab-week02-hosta ip route del default
-docker exec clab-week02-hosta ping -c 2 192.168.10.70
+ip route del default
+ping -c 2 192.168.10.70
 ```
 
 **Expected:** "Network is unreachable" — without a gateway, the host can't reach other subnets.
 
 **Step 3:** Restore the gateway:
 ```bash
-docker exec clab-week02-hosta ip route add default via 192.168.10.1
+ip route add default via 192.168.10.1
 ```
 
 ---
 
 ### Exercise 7: Explore the Router Configuration
 
-**Step 1:** View the full running config of R1
+**On R1** (`lab r1`):
+
+**Step 1:** View the full running config:
 ```bash
-docker exec -it clab-week02-r1 vtysh -c "show running-config"
+vtysh -c "show running-config"
 ```
 
 **Step 2:** Examine static routes — identify:
@@ -203,9 +231,10 @@ docker exec -it clab-week02-r1 vtysh -c "show running-config"
 
 ### Exercise 8: Clean Up
 
+Exit all container shells (type `exit`), then from your Mac terminal:
 ```bash
 cd ~/Desktop/CCNA/week-02/lab/
-sudo containerlab destroy -t topology.yml
+lab destroy
 ```
 
 ---
