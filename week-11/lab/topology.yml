@@ -1,0 +1,141 @@
+# Week 11 — Lab Topology: Comprehensive Review Network
+# This topology combines concepts from Weeks 1-10 into one lab.
+
+name: week11-review
+
+topology:
+  nodes:
+    # ── Routers ──
+    r1-edge:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - r1_daemons:/etc/frr/daemons
+        - r1_frr.conf:/etc/frr/frr.conf
+
+    r2-hq:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - r2_daemons:/etc/frr/daemons
+        - r2_frr.conf:/etc/frr/frr.conf
+
+    r3-branch:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - r3_daemons:/etc/frr/daemons
+        - r3_frr.conf:/etc/frr/frr.conf
+
+    # ── ISP (simulated) ──
+    isp:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 203.0.113.1/30 dev eth1
+        - echo "ISP gateway ready"
+
+    # ── HQ Switches (bridges) ──
+    sw1-hq:
+      kind: bridge
+
+    sw2-hq:
+      kind: bridge
+
+    # ── Branch Switch ──
+    sw3-branch:
+      kind: bridge
+
+    # ── HQ Hosts ──
+    pc1-eng:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.10.10.10/24 dev eth1
+        - ip route add default via 10.10.10.1
+
+    pc2-eng:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.10.10.11/24 dev eth1
+        - ip route add default via 10.10.10.1
+
+    pc3-sales:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.10.20.10/24 dev eth1
+        - ip route add default via 10.10.20.1
+
+    pc4-sales:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.10.20.11/24 dev eth1
+        - ip route add default via 10.10.20.1
+
+    # ── Branch Hosts ──
+    pc5-branch:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.20.10.10/24 dev eth1
+        - ip route add default via 10.20.10.1
+
+    pc6-branch:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.20.10.11/24 dev eth1
+        - ip route add default via 10.20.10.1
+
+  links:
+    # ── ISP ↔ R1-Edge ──
+    - endpoints: ["isp:eth1", "r1-edge:eth0"]
+
+    # ── R1-Edge ↔ R2-HQ (WAN) ──
+    - endpoints: ["r1-edge:eth1", "r2-hq:eth0"]
+
+    # ── R1-Edge ↔ R3-Branch (WAN) ──
+    - endpoints: ["r1-edge:eth2", "r3-branch:eth0"]
+
+    # ── R2-HQ ↔ HQ switches ──
+    - endpoints: ["r2-hq:eth1", "sw1-hq:eth1"]
+    - endpoints: ["r2-hq:eth2", "sw2-hq:eth1"]
+
+    # ── HQ hosts ──
+    - endpoints: ["pc1-eng:eth1", "sw1-hq:eth2"]
+    - endpoints: ["pc2-eng:eth1", "sw1-hq:eth3"]
+    - endpoints: ["pc3-sales:eth1", "sw2-hq:eth2"]
+    - endpoints: ["pc4-sales:eth1", "sw2-hq:eth3"]
+
+    # ── R3-Branch ↔ Branch switch ──
+    - endpoints: ["r3-branch:eth1", "sw3-branch:eth1"]
+
+    # ── Branch hosts ──
+    - endpoints: ["pc5-branch:eth1", "sw3-branch:eth2"]
+    - endpoints: ["pc6-branch:eth1", "sw3-branch:eth3"]
+
+# ─────────────────────────────────────────────
+# IP Addressing Plan
+# ─────────────────────────────────────────────
+# ISP → R1      : 203.0.113.0/30  (ISP=.1, R1=.2)
+# R1 → R2 WAN   : 10.0.0.0/30    (R1=.1, R2=.2)
+# R1 → R3 WAN   : 10.0.0.4/30    (R1=.5, R3=.6)
+# VLAN 10 (Eng)  : 10.10.10.0/24  (R2=.1)
+# VLAN 20 (Sales): 10.10.20.0/24  (R2=.1)
+# Branch LAN     : 10.20.10.0/24  (R3=.1)
+#
+# ─────────────────────────────────────────────
+# Goals:
+#   1. Configure OSPF area 0 on R1, R2, R3
+#   2. Static default route on R1 → ISP
+#   3. Redistribute default into OSPF on R1
+#   4. Verify end-to-end: pc1-eng → pc5-branch
+#   5. Add NAT on R1 for internet simulation
+#   6. Practice show commands on all devices
+#
+# Deploy:  sudo containerlab deploy -t topology.yml
+# Destroy: sudo containerlab destroy -t topology.yml
+# ─────────────────────────────────────────────
