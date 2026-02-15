@@ -1,0 +1,166 @@
+# Week 12 — Lab Topology: Final Comprehensive Enterprise Network
+# This topology is the capstone — it combines every concept from Weeks 1-10.
+
+name: week12-capstone
+
+topology:
+  nodes:
+    # ── ISP (simulated external network) ──
+    isp:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 203.0.113.1/30 dev eth1
+        - ip route add 10.0.0.0/8 via 203.0.113.2
+        - echo "ISP ready — simulating internet"
+
+    # ── Edge Router (NAT/PAT + OSPF + Default Route) ──
+    r1-edge:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - r1_daemons:/etc/frr/daemons
+        - r1_frr.conf:/etc/frr/frr.conf
+
+    # ── HQ Router (OSPF + DHCP + Inter-VLAN) ──
+    r2-hq:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - r2_daemons:/etc/frr/daemons
+        - r2_frr.conf:/etc/frr/frr.conf
+
+    # ── Branch Router (OSPF) ──
+    r3-branch:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - r3_daemons:/etc/frr/daemons
+        - r3_frr.conf:/etc/frr/frr.conf
+
+    # ── HQ Switches ──
+    sw1-hq:
+      kind: bridge
+
+    sw2-hq:
+      kind: bridge
+
+    # ── Branch Switch ──
+    sw3-branch:
+      kind: bridge
+
+    # ── HQ Engineering PCs (VLAN 10) ──
+    pc1-eng:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.10.10.10/24 dev eth1
+        - ip route add default via 10.10.10.1
+
+    pc2-eng:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.10.10.11/24 dev eth1
+        - ip route add default via 10.10.10.1
+
+    # ── HQ Sales PCs (VLAN 20) ──
+    pc3-sales:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.10.20.10/24 dev eth1
+        - ip route add default via 10.10.20.1
+
+    pc4-sales:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.10.20.11/24 dev eth1
+        - ip route add default via 10.10.20.1
+
+    # ── HQ Server (VLAN 30) ──
+    srv1:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.10.30.10/24 dev eth1
+        - ip route add default via 10.10.30.1
+
+    # ── Branch PCs (VLAN 10) ──
+    pc5-branch:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.20.10.10/24 dev eth1
+        - ip route add default via 10.20.10.1
+
+    pc6-branch:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.20.10.11/24 dev eth1
+        - ip route add default via 10.20.10.1
+
+  links:
+    # ── ISP ↔ R1-Edge ──
+    - endpoints: ["isp:eth1", "r1-edge:eth0"]
+
+    # ── R1-Edge ↔ R2-HQ (WAN) ──
+    - endpoints: ["r1-edge:eth1", "r2-hq:eth0"]
+
+    # ── R1-Edge ↔ R3-Branch (WAN) ──
+    - endpoints: ["r1-edge:eth2", "r3-branch:eth0"]
+
+    # ── R2-HQ ↔ SW1-HQ ──
+    - endpoints: ["r2-hq:eth1", "sw1-hq:eth1"]
+
+    # ── R2-HQ ↔ SW2-HQ ──
+    - endpoints: ["r2-hq:eth2", "sw2-hq:eth1"]
+
+    # ── HQ Engineering hosts ──
+    - endpoints: ["pc1-eng:eth1", "sw1-hq:eth2"]
+    - endpoints: ["pc2-eng:eth1", "sw1-hq:eth3"]
+
+    # ── HQ Sales hosts ──
+    - endpoints: ["pc3-sales:eth1", "sw2-hq:eth2"]
+    - endpoints: ["pc4-sales:eth1", "sw2-hq:eth3"]
+
+    # ── HQ Server ──
+    - endpoints: ["srv1:eth1", "sw2-hq:eth4"]
+
+    # ── R3-Branch ↔ SW3-Branch ──
+    - endpoints: ["r3-branch:eth1", "sw3-branch:eth1"]
+
+    # ── Branch hosts ──
+    - endpoints: ["pc5-branch:eth1", "sw3-branch:eth2"]
+    - endpoints: ["pc6-branch:eth1", "sw3-branch:eth3"]
+
+# ─────────────────────────────────────────────
+# IP Addressing Plan (Capstone Lab)
+# ─────────────────────────────────────────────
+#
+# ISP ↔ R1-Edge  : 203.0.113.0/30  (ISP=.1, R1=.2)
+# R1 ↔ R2 WAN    : 10.0.0.0/30    (R1=.1, R2=.2)
+# R1 ↔ R3 WAN    : 10.0.0.4/30    (R1=.5, R3=.6)
+#
+# HQ VLAN 10 (Eng)    : 10.10.10.0/24  (R2 sub=.1)
+# HQ VLAN 20 (Sales)  : 10.10.20.0/24  (R2 sub=.1)
+# HQ VLAN 30 (Servers) : 10.10.30.0/24 (R2 sub=.1)
+# Branch VLAN 10       : 10.20.10.0/24 (R3=.1)
+#
+# ─────────────────────────────────────────────
+# Capstone Goals (verify ALL):
+#   1. OSPF area 0 on all routers
+#   2. Static default on R1 → ISP, redistribute into OSPF
+#   3. PAT on R1 for all 10.x traffic
+#   4. DHCP on R2 for VLAN 10 and 20
+#   5. Inter-VLAN routing via R2 subinterfaces
+#   6. ACL: Block VLAN 20 → VLAN 30
+#   7. End-to-end: pc1-eng → pc5-branch (success)
+#   8. End-to-end: pc3-sales → srv1 (blocked by ACL)
+#   9. End-to-end: pc1-eng → isp (NAT working)
+#
+# Deploy:  sudo containerlab deploy -t topology.yml
+# Destroy: sudo containerlab destroy -t topology.yml
+# ─────────────────────────────────────────────
