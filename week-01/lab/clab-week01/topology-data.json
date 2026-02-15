@@ -49,18 +49,6 @@
         {
           "host-ip": "",
           "host-port": 0,
-          "port": 11443,
-          "protocol": "tcp"
-        },
-        {
-          "host-ip": "",
-          "host-port": 0,
-          "port": 1180,
-          "protocol": "tcp"
-        },
-        {
-          "host-ip": "",
-          "host-port": 0,
           "port": 443,
           "protocol": "tcp"
         },
@@ -68,6 +56,18 @@
           "host-ip": "",
           "host-port": 0,
           "port": 80,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 11443,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
+          "port": 1180,
           "protocol": "tcp"
         }
       ]
@@ -159,6 +159,12 @@
         {
           "host-ip": "",
           "host-port": 0,
+          "port": 80,
+          "protocol": "tcp"
+        },
+        {
+          "host-ip": "",
+          "host-port": 0,
           "port": 11443,
           "protocol": "tcp"
         },
@@ -173,12 +179,6 @@
           "host-port": 0,
           "port": 443,
           "protocol": "tcp"
-        },
-        {
-          "host-ip": "",
-          "host-port": 0,
-          "port": 80,
-          "protocol": "tcp"
         }
       ]
     }
@@ -189,13 +189,13 @@
         "a": {
           "node": "pc1",
           "interface": "eth1",
-          "mac": "aa:c1:ab:88:b7:f3",
+          "mac": "aa:c1:ab:f7:ad:b2",
           "peer": "z"
         },
         "z": {
           "node": "switch",
           "interface": "eth1",
-          "mac": "aa:c1:ab:f6:82:10",
+          "mac": "aa:c1:ab:bf:ca:e7",
           "peer": "a"
         }
       }
@@ -205,13 +205,13 @@
         "a": {
           "node": "pc2",
           "interface": "eth1",
-          "mac": "aa:c1:ab:a1:e7:33",
+          "mac": "aa:c1:ab:fa:7e:f8",
           "peer": "z"
         },
         "z": {
           "node": "switch",
           "interface": "eth2",
-          "mac": "aa:c1:ab:d6:a7:c2",
+          "mac": "aa:c1:ab:c9:8b:84",
           "peer": "a"
         }
       }

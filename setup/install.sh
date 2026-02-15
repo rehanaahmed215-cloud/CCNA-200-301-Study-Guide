@@ -61,6 +61,19 @@ WRAPPER
 sudo chmod +x "$CLAB_WRAPPER"
 echo -e "${GREEN}Done (/usr/local/bin/containerlab)${NC}"
 
+# --- Install lab helper script ---
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+LAB_HELPER="/usr/local/bin/lab"
+
+echo -n "Installing lab helper script... "
+if [[ -f "$SCRIPT_DIR/lab" ]]; then
+    sudo cp "$SCRIPT_DIR/lab" "$LAB_HELPER"
+    sudo chmod +x "$LAB_HELPER"
+    echo -e "${GREEN}Done (/usr/local/bin/lab)${NC}"
+else
+    echo -e "${YELLOW}Skipped (setup/lab not found)${NC}"
+fi
+
 # --- Pull Docker Images ---
 echo ""
 echo "Pulling required Docker images..."
@@ -101,5 +114,8 @@ echo ""
 echo "Next steps:"
 echo "  1. Also install Cisco Packet Tracer (see ENVIRONMENT-SETUP.md)"
 echo "  2. Start Week 1: cd ../week-01/lab/"
-echo "  3. Deploy:        sudo containerlab deploy -t topology.yml"
+echo "  3. Deploy:        containerlab deploy -t topology.yml"
+echo "  4. Connect:       lab ls          (list nodes)"
+echo "                    lab pc1         (shell into pc1)"
+echo "                    lab --all       (open all nodes in tabs)"
 echo ""
