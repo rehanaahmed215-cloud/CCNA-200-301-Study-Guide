@@ -1,0 +1,93 @@
+# Week 10 — Lab Topology: Network Automation & Programmability
+# NOTE: This week focuses on APIs, scripting, and configuration management.
+# The topology provides a basic network for automation targets.
+
+name: week10-automation
+
+topology:
+  nodes:
+    # ── Routers (automation targets) ──
+    r1:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - r1_daemons:/etc/frr/daemons
+        - r1_frr.conf:/etc/frr/frr.conf
+
+    r2:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - r2_daemons:/etc/frr/daemons
+        - r2_frr.conf:/etc/frr/frr.conf
+
+    # ── Switches (L2 bridges) ──
+    sw1:
+      kind: bridge
+
+    sw2:
+      kind: bridge
+
+    # ── Automation workstation ──
+    workstation:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 192.168.1.100/24 dev eth1
+        - ip route add 10.0.0.0/8 via 192.168.1.1
+
+    # ── Managed hosts ──
+    pc1:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 192.168.1.10/24 dev eth1
+        - ip route add default via 192.168.1.1
+
+    pc2:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr add 10.0.1.10/24 dev eth1
+        - ip route add default via 10.0.1.1
+
+  links:
+    # ── LAN 1: workstation + pc1 → sw1 → r1 ──
+    - endpoints: ["workstation:eth1", "sw1:eth1"]
+    - endpoints: ["pc1:eth1", "sw1:eth2"]
+    - endpoints: ["r1:eth0", "sw1:eth3"]
+
+    # ── WAN link: r1 ↔ r2 ──
+    - endpoints: ["r1:eth1", "r2:eth0"]
+
+    # ── LAN 2: pc2 → sw2 → r2 ──
+    - endpoints: ["pc2:eth1", "sw2:eth1"]
+    - endpoints: ["r2:eth1", "sw2:eth2"]
+
+# ─────────────────────────────────────────────
+# IP Addressing Plan
+# ─────────────────────────────────────────────
+# LAN 1 (192.168.1.0/24):
+#   r1 eth0          = 192.168.1.1/24
+#   workstation eth1  = 192.168.1.100/24
+#   pc1 eth1          = 192.168.1.10/24
+#
+# WAN (10.0.0.0/30):
+#   r1 eth1           = 10.0.0.1/30
+#   r2 eth0           = 10.0.0.2/30
+#
+# LAN 2 (10.0.1.0/24):
+#   r2 eth1           = 10.0.1.1/24
+#   pc2 eth1          = 10.0.1.10/24
+#
+# ─────────────────────────────────────────────
+# Usage:
+#   1. sudo containerlab deploy -t topology.yml
+#   2. Use the workstation container as your "automation PC":
+#      docker exec -it clab-week10-automation-workstation bash
+#   3. From the workstation, practice:
+#      - curl to query router APIs (if REST shim is installed)
+#      - SSH into r1/r2 for CLI comparison
+#      - Run Python scripts against network devices
+#   4. Destroy: sudo containerlab destroy -t topology.yml
+# ─────────────────────────────────────────────
