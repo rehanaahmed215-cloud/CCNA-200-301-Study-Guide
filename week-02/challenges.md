@@ -1,5 +1,15 @@
 # Week 2 — Challenges: IPv4 Addressing & Subnetting
 
+## Table of Contents
+- [Challenge 1: VLSM Design](#challenge-1-vlsm-design)
+- [Challenge 2: Speed Subnetting Drill](#challenge-2-speed-subnetting-drill-20-problems)
+- [Challenge 3: Explain Subnet Differences](#challenge-3-explain-subnet-differences)
+- [Challenge 4: Network Troubleshooting Scenario](#challenge-4-network-troubleshooting-scenario)
+- [Challenge 5: Build the VLSM Network in ContainerLab](#challenge-5-build-the-vlsm-network-in-containerlab)
+- [Scoring Guide](#scoring-guide)
+
+---
+
 Complete these challenges without looking at your notes.
 
 ---

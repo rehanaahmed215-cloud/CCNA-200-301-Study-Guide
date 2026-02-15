@@ -1,5 +1,17 @@
 # Week 1 — Network Fundamentals: OSI & TCP/IP Models
 
+## Table of Contents
+- [Learning Objectives](#learning-objectives)
+- [1. The OSI Model](#1-the-osi-model-open-systems-interconnection)
+- [2. The TCP/IP Model](#2-the-tcpip-model)
+- [3. Encapsulation & De-encapsulation](#3-encapsulation--de-encapsulation)
+- [4. Common Protocols by Layer](#4-common-protocols-by-layer)
+- [5. Devices at Each Layer](#5-devices-at-each-layer)
+- [Quiz — Test Your Understanding](#quiz--test-your-understanding)
+- [Key Takeaways](#key-takeaways)
+
+---
+
 ## Learning Objectives
 
 By the end of this week, you should be able to:

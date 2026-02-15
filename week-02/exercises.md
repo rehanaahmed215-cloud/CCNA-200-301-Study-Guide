@@ -1,5 +1,20 @@
 # Week 2 — Exercises: IPv4 Addressing & Subnetting
 
+## Table of Contents
+- [Lab Overview](#lab-overview)
+- [Part A: Subnetting by Hand](#part-a-subnetting-by-hand)
+- [Part B: Containerlab Lab — Multi-Subnet Routing](#part-b-containerlab-lab--multi-subnet-routing)
+  - [Exercise 2: Deploy the Topology](#exercise-2-deploy-the-topology)
+  - [Exercise 3: Verify IP Configuration](#exercise-3-verify-ip-configuration)
+  - [Exercise 4: Verify Routing Tables](#exercise-4-verify-routing-tables)
+  - [Exercise 5: Test Connectivity Across Subnets](#exercise-5-test-connectivity-across-subnets)
+  - [Exercise 6: Observe Subnetting in Action](#exercise-6-observe-subnetting-in-action)
+  - [Exercise 7: Explore the Router Configuration](#exercise-7-explore-the-router-configuration)
+- [Part C: Cisco Packet Tracer Lab](#part-c-cisco-packet-tracer-lab)
+- [Verification Checklist](#verification-checklist)
+
+---
+
 ## Lab Overview
 
 In this lab, you will:

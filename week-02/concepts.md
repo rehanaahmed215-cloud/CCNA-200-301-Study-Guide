@@ -1,5 +1,18 @@
 # Week 2 — IPv4 Addressing & Subnetting
 
+## Table of Contents
+- [Learning Objectives](#learning-objectives)
+- [1. Binary ↔ Decimal Conversion](#1-binary--decimal-conversion)
+- [2. IPv4 Address Structure](#2-ipv4-address-structure)
+- [3. IPv4 Address Classes](#3-ipv4-address-classes)
+- [4. Subnetting — Step by Step](#4-subnetting--step-by-step)
+- [5. Splitting a Network into Subnets](#5-splitting-a-network-into-subnets)
+- [6. VLSM (Variable Length Subnet Masking)](#6-vlsm-variable-length-subnet-masking)
+- [Quiz — Test Your Understanding](#quiz--test-your-understanding)
+- [Key Takeaways](#key-takeaways)
+
+---
+
 ## Learning Objectives
 
 By the end of this week, you should be able to:

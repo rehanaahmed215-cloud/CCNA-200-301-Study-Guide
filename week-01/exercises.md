@@ -1,5 +1,20 @@
 # Week 1 — Exercises: OSI & TCP/IP in Action
 
+## Table of Contents
+- [Lab Overview](#lab-overview)
+- [Part A: Containerlab Lab](#part-a-containerlab-lab--observing-network-layers)
+  - [Exercise 1: Deploy the Topology](#exercise-1-deploy-the-topology)
+  - [Exercise 2: Configure IP Addresses](#exercise-2-configure-ip-addresses)
+  - [Exercise 3: Test Connectivity with Ping](#exercise-3-test-connectivity-with-ping-icmp--layer-3)
+  - [Exercise 4: Observe ARP](#exercise-4-observe-arp-layer-2--layer-3-bridge)
+  - [Exercise 5: Observe TCP Three-Way Handshake](#exercise-5-observe-tcp-three-way-handshake-layer-4)
+  - [Exercise 6: Examine Encapsulation with tcpdump](#exercise-6-examine-encapsulation-with-tcpdump)
+  - [Exercise 7: Clean Up](#exercise-7-clean-up)
+- [Part B: Cisco Packet Tracer Lab](#part-b-cisco-packet-tracer-lab)
+- [Verification Checklist](#verification-checklist)
+
+---
+
 ## Lab Overview
 
 In this lab, you will:

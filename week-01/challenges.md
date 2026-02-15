@@ -1,5 +1,15 @@
 # Week 1 — Challenges: OSI & TCP/IP Models
 
+## Table of Contents
+- [Challenge 1: Draw the OSI Model from Memory](#challenge-1-draw-the-osi-model-from-memory)
+- [Challenge 2: Trace a Ping — Full Layer-by-Layer Write-Up](#challenge-2-trace-a-ping--full-layer-by-layer-write-up)
+- [Challenge 3: Frame at a Switch vs. Packet at a Router](#challenge-3-frame-at-a-switch-vs-packet-at-a-router)
+- [Challenge 4: Protocol Identification Drill](#challenge-4-protocol-identification-drill)
+- [Challenge 5: Build and Break — Troubleshooting Lab](#challenge-5-build-and-break--troubleshooting-lab)
+- [Scoring Guide](#scoring-guide)
+
+---
+
 These challenges are designed to be completed **without looking at your notes**. Try each one independently before checking your work.
 
 ---
