@@ -15,9 +15,17 @@ topology:
         - ip addr add 10.0.0.1/30 dev eth2
         - sysctl -w net.ipv4.ip_forward=1
 
-    # LAN bridge (switch)
+    # LAN switch
     lan-switch:
-      kind: bridge
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip link add br0 type bridge
+        - ip link set br0 up
+        - ip link set eth1 master br0
+        - ip link set eth2 master br0
+        - ip link set eth3 master br0
+        - ip link set eth4 master br0
 
     # Simulated ISP
     isp:

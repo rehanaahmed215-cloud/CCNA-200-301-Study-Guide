@@ -37,17 +37,35 @@ topology:
         - ip addr add 10.0.23.2/30 dev eth2
         - sysctl -w net.ipv4.ip_forward=1
 
-    # LAN bridge for R1
+    # LAN switch for R1
     lan1:
-      kind: bridge
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip link add br0 type bridge
+        - ip link set br0 up
+        - ip link set eth1 master br0
+        - ip link set eth2 master br0
 
-    # LAN bridge for R2
+    # LAN switch for R2
     lan2:
-      kind: bridge
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip link add br0 type bridge
+        - ip link set br0 up
+        - ip link set eth1 master br0
+        - ip link set eth2 master br0
 
-    # LAN bridge for R3
+    # LAN switch for R3
     lan3:
-      kind: bridge
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip link add br0 type bridge
+        - ip link set br0 up
+        - ip link set eth1 master br0
+        - ip link set eth2 master br0
 
     # Host on R1 LAN
     pc1:

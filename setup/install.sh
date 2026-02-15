@@ -34,20 +34,33 @@ else
     exit 1
 fi
 
-# --- Install Containerlab ---
-echo -n "Checking Containerlab... "
-if command -v containerlab &> /dev/null; then
-    echo -e "${GREEN}Found ($(containerlab version 2>&1 | head -1))${NC}"
+# --- Install Containerlab (via Docker) ---
+CLAB_IMAGE="ghcr.io/srl-labs/clab:latest"
+CLAB_WRAPPER="/usr/local/bin/containerlab"
+
+echo -n "Pulling Containerlab Docker image... "
+if docker pull "$CLAB_IMAGE" > /dev/null 2>&1; then
+    echo -e "${GREEN}Done${NC}"
 else
-    echo -e "${YELLOW}Not found — installing...${NC}"
-    if command -v brew &> /dev/null; then
-        brew install containerlab
-    else
-        echo "Installing via official script..."
-        bash -c "$(curl -sL https://get.containerlab.dev)"
-    fi
-    echo -e "${GREEN}Containerlab installed${NC}"
+    echo -e "${RED}Failed to pull $CLAB_IMAGE${NC}"
+    exit 1
 fi
+
+echo -n "Installing containerlab wrapper script... "
+sudo tee "$CLAB_WRAPPER" > /dev/null << 'WRAPPER'
+#!/bin/bash
+# Wrapper to run containerlab inside Docker on macOS
+docker run --rm -it --privileged \
+    --network host \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /etc/hosts:/etc/hosts \
+    --pid="host" \
+    -w "$(pwd)" \
+    -v "$(pwd)":"$(pwd)" \
+    ghcr.io/srl-labs/clab:latest containerlab "$@"
+WRAPPER
+sudo chmod +x "$CLAB_WRAPPER"
+echo -e "${GREEN}Done (/usr/local/bin/containerlab)${NC}"
 
 # --- Pull Docker Images ---
 echo ""

@@ -20,13 +20,25 @@ topology:
         - ip addr add 192.168.20.1/24 dev eth2
         - sysctl -w net.ipv4.ip_forward=1
 
-    # Corporate VLAN bridge
+    # Corporate VLAN switch
     corp-switch:
-      kind: bridge
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip link add br0 type bridge
+        - ip link set br0 up
+        - ip link set eth1 master br0
+        - ip link set eth2 master br0
 
-    # Guest VLAN bridge
+    # Guest VLAN switch
     guest-switch:
-      kind: bridge
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip link add br0 type bridge
+        - ip link set br0 up
+        - ip link set eth1 master br0
+        - ip link set eth2 master br0
 
     # Simulated corporate wireless client
     corp-client:

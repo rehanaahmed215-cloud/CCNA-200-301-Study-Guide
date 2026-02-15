@@ -21,12 +21,25 @@ topology:
         - r2_daemons:/etc/frr/daemons
         - r2_frr.conf:/etc/frr/frr.conf
 
-    # ── Switches (L2 bridges) ──
+    # ── Switches (L2 containers) ──
     sw1:
-      kind: bridge
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip link add br0 type bridge
+        - ip link set br0 up
+        - ip link set eth1 master br0
+        - ip link set eth2 master br0
+        - ip link set eth3 master br0
 
     sw2:
-      kind: bridge
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip link add br0 type bridge
+        - ip link set br0 up
+        - ip link set eth1 master br0
+        - ip link set eth2 master br0
 
     # ── Automation workstation ──
     workstation:
