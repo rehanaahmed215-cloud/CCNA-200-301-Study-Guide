@@ -1,0 +1,66 @@
+name: week07-ipservices
+
+topology:
+  nodes:
+    # Router with DHCP (dnsmasq) and NAT capabilities
+    router1:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        - ip link set eth1 up
+        - ip link set eth2 up
+        # LAN-facing interface
+        - ip addr add 192.168.1.1/24 dev eth1
+        # WAN-facing interface (simulated "internet")
+        - ip addr add 10.0.0.1/30 dev eth2
+        - sysctl -w net.ipv4.ip_forward=1
+
+    # LAN bridge (switch)
+    lan-switch:
+      kind: bridge
+
+    # Simulated ISP
+    isp:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr flush dev eth1
+        - ip addr add 10.0.0.2/30 dev eth1
+        - ip route add 192.168.1.0/24 via 10.0.0.1
+
+    # LAN host 1
+    pc1:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr flush dev eth1
+        - ip addr add 192.168.1.10/24 dev eth1
+        - ip route add default via 192.168.1.1
+
+    # LAN host 2
+    pc2:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr flush dev eth1
+        - ip addr add 192.168.1.20/24 dev eth1
+        - ip route add default via 192.168.1.1
+
+    # LAN host 3
+    pc3:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr flush dev eth1
+        - ip addr add 192.168.1.30/24 dev eth1
+        - ip route add default via 192.168.1.1
+
+  links:
+    # Router to LAN switch
+    - endpoints: ["router1:eth1", "lan-switch:eth1"]
+    # Router to ISP (WAN)
+    - endpoints: ["router1:eth2", "isp:eth1"]
+    # PCs to LAN switch
+    - endpoints: ["pc1:eth1", "lan-switch:eth2"]
+    - endpoints: ["pc2:eth1", "lan-switch:eth3"]
+    - endpoints: ["pc3:eth1", "lan-switch:eth4"]
