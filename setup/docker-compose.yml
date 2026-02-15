@@ -1,0 +1,33 @@
+version: '3.8'
+
+# Base Docker Compose for shared services across labs.
+# Individual weeks use Containerlab topology files for their specific setups.
+
+services:
+  # Syslog server — used in Week 7+
+  syslog:
+    image: balabit/syslog-ng:latest
+    container_name: ccna-syslog
+    ports:
+      - "514:514/udp"
+    volumes:
+      - syslog-data:/var/log/syslog-ng
+    restart: unless-stopped
+    profiles:
+      - services
+
+  # TFTP server — used for config backup exercises
+  tftp:
+    image: pghalliday/tftp:latest
+    container_name: ccna-tftp
+    ports:
+      - "69:69/udp"
+    volumes:
+      - tftp-data:/var/tftpboot
+    restart: unless-stopped
+    profiles:
+      - services
+
+volumes:
+  syslog-data:
+  tftp-data:
