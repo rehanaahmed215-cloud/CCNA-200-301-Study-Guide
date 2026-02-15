@@ -1,0 +1,96 @@
+name: week06-routing
+
+topology:
+  nodes:
+    # Router 1 — HQ with LAN
+    router1:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        - ip link set eth1 up
+        - ip link set eth2 up
+        - ip addr add 192.168.1.1/24 dev eth1
+        - ip addr add 10.0.12.1/30 dev eth2
+        - sysctl -w net.ipv4.ip_forward=1
+
+    # Router 2 — middle router
+    router2:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        - ip link set eth1 up
+        - ip link set eth2 up
+        - ip link set eth3 up
+        - ip addr add 192.168.2.1/24 dev eth1
+        - ip addr add 10.0.12.2/30 dev eth2
+        - ip addr add 10.0.23.1/30 dev eth3
+        - sysctl -w net.ipv4.ip_forward=1
+
+    # Router 3 — remote site with LAN
+    router3:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        - ip link set eth1 up
+        - ip link set eth2 up
+        - ip addr add 192.168.3.1/24 dev eth1
+        - ip addr add 10.0.23.2/30 dev eth2
+        - sysctl -w net.ipv4.ip_forward=1
+
+    # LAN bridge for R1
+    lan1:
+      kind: bridge
+
+    # LAN bridge for R2
+    lan2:
+      kind: bridge
+
+    # LAN bridge for R3
+    lan3:
+      kind: bridge
+
+    # Host on R1 LAN
+    pc1:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr flush dev eth1
+        - ip addr add 192.168.1.10/24 dev eth1
+        - ip route add default via 192.168.1.1
+
+    # Host on R2 LAN
+    pc2:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr flush dev eth1
+        - ip addr add 192.168.2.10/24 dev eth1
+        - ip route add default via 192.168.2.1
+
+    # Host on R3 LAN
+    pc3:
+      kind: linux
+      image: wbitt/network-multitool:latest
+      exec:
+        - ip addr flush dev eth1
+        - ip addr add 192.168.3.10/24 dev eth1
+        - ip route add default via 192.168.3.1
+
+  links:
+    # R1 LAN
+    - endpoints: ["router1:eth1", "lan1:eth1"]
+    - endpoints: ["pc1:eth1", "lan1:eth2"]
+
+    # R2 LAN
+    - endpoints: ["router2:eth1", "lan2:eth1"]
+    - endpoints: ["pc2:eth1", "lan2:eth2"]
+
+    # R3 LAN
+    - endpoints: ["router3:eth1", "lan3:eth1"]
+    - endpoints: ["pc3:eth1", "lan3:eth2"]
+
+    # WAN: R1 ↔ R2
+    - endpoints: ["router1:eth2", "router2:eth2"]
+
+    # WAN: R2 ↔ R3
+    - endpoints: ["router2:eth3", "router3:eth2"]
