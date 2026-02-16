@@ -351,4 +351,17 @@ So 192.168.1.255/23 belongs to network 192.168.0.0/23 and is the broadcast addre
 
 ---
 
+## Sources & Further Reading
+
+- [Cisco — IP Addressing Guide](https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html) — Cisco's IP addressing & subnetting reference
+- [RFC 791 — Internet Protocol](https://datatracker.ietf.org/doc/html/rfc791) — IPv4 specification
+- [RFC 1918 — Private Address Space](https://datatracker.ietf.org/doc/html/rfc1918) — Private IP ranges (10.x, 172.16.x, 192.168.x)
+- [RFC 4632 — CIDR](https://datatracker.ietf.org/doc/html/rfc4632) — Classless Inter-Domain Routing
+- [Subnet Calculator](https://www.subnet-calculator.com/) — Online subnetting practice tool
+- [Practical Networking — Subnetting Mastery](https://www.practicalnetworking.net/stand-alone/subnetting-mastery/) — Step-by-step subnetting guide
+- [Jeremy's IT Lab — Subnetting (YouTube)](https://www.youtube.com/watch?v=Ct4PU6CyvTQ&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ) — Video walkthrough
+- [Subnetting Practice — subnettingpractice.com](https://subnettingpractice.com/) — Timed subnetting drills
+
+---
+
 **Next:** [Exercises →](exercises.md)

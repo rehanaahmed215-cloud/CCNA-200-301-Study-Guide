@@ -373,4 +373,16 @@ Where does a packet destined for 10.1.1.50 go?
 
 ---
 
+## Sources & Further Reading
+
+- [RFC 2328 — OSPFv2](https://datatracker.ietf.org/doc/html/rfc2328) — OSPF Version 2 specification
+- [Cisco — OSPF Design Guide](https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html) — Cisco's OSPF design best practices
+- [Cisco — IP Routing: Static Routes](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/iri-xe-16-book/iri-static-route.html) — Static route configuration
+- [Cisco — OSPF Configuration Guide](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/configuration/xe-16/iro-xe-16-book.html) — IOS OSPF config reference
+- [Practical Networking — OSPF](https://www.practicalnetworking.net/stand-alone/ospf-terminology/) — OSPF concepts and terminology
+- [Jeremy's IT Lab — OSPF (YouTube)](https://www.youtube.com/watch?v=mxjclSMoJMo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ) — Video walkthrough
+- [FRRouting Documentation](https://docs.frrouting.org/en/latest/ospfd.html) — FRR OSPF reference (used in labs)
+
+---
+
 **Next → [Week 6 Exercises](exercises.md)**

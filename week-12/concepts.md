@@ -441,6 +441,18 @@ What does `E2` mean?
 
 ---
 
+## Sources & Further Reading
+
+- [Cisco CCNA 200-301 Exam Topics](https://learningnetwork.cisco.com/s/ccna-exam-topics) — Official exam blueprint (final review)
+- [Cisco — CCNA Exam Tutorial](https://www.cisco.com/c/en/us/training-events/training-certifications/exams/current-list/ccna-200-301.html) — Exam registration and logistics
+- [Pearson VUE — Cisco Exam Scheduling](https://home.pearsonvue.com/cisco) — Book your exam
+- [Boson ExSim for CCNA](https://www.boson.com/practice-exam/200-301-cisco-ccna-practice-exam) — Final practice exams
+- [Cisco Learning Network — Exam Day Tips](https://learningnetwork.cisco.com/s/article/exam-preparation-resources) — What to expect on exam day
+- [r/ccna — Reddit Community](https://www.reddit.com/r/ccna/) — Community tips and pass stories
+- [Jeremy's IT Lab — Full CCNA Playlist (YouTube)](https://www.youtube.com/playlist?list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ) — Last-minute review
+
+---
+
 **You've completed the entire 12-week CCNA 200-301 study plan. Go pass that exam! 🎯**
 
 **→ Continue to [Exercises](exercises.md) for final timed practice.**

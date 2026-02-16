@@ -408,4 +408,19 @@ for host in hosts:
 
 ---
 
+## Sources & Further Reading
+
+- [Cisco — Network Programmability Basics](https://developer.cisco.com/learning/tracks/netprog-basics/) — Free DevNet learning track
+- [Cisco DevNet](https://developer.cisco.com/) — APIs, SDKs, and sandbox labs
+- [Cisco DNA Center Overview](https://www.cisco.com/c/en/us/products/cloud-systems-management/dna-center/index.html) — Cisco's SDN controller
+- [RFC 8040 — RESTCONF](https://datatracker.ietf.org/doc/html/rfc8040) — RESTCONF protocol specification
+- [RFC 6241 — NETCONF](https://datatracker.ietf.org/doc/html/rfc6241) — NETCONF protocol specification
+- [Ansible Networking Documentation](https://docs.ansible.com/ansible/latest/network/index.html) — Ansible for network automation
+- [Puppet Cisco IOS Module](https://forge.puppet.com/modules/puppetlabs/cisco_ios) — Puppet for Cisco devices
+- [JSON.org](https://www.json.org/) — JSON data format reference
+- [YAML.org](https://yaml.org/) — YAML data format reference
+- [Jeremy's IT Lab — Automation (YouTube)](https://www.youtube.com/watch?v=IkMTFkx0cYA&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ) — Video walkthrough
+
+---
+
 **Next → [Week 10 Exercises](exercises.md)**

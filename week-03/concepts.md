@@ -306,4 +306,16 @@ Because the expander wouldn't know how to distribute zeros. Example: `2001::1::2
 
 ---
 
+## Sources & Further Reading
+
+- [RFC 8200 — IPv6 Specification](https://datatracker.ietf.org/doc/html/rfc8200) — Core IPv6 protocol
+- [RFC 4291 — IPv6 Addressing Architecture](https://datatracker.ietf.org/doc/html/rfc4291) — Address types and formats
+- [RFC 4861 — Neighbor Discovery Protocol (NDP)](https://datatracker.ietf.org/doc/html/rfc4861) — IPv6's replacement for ARP
+- [RFC 4862 — SLAAC](https://datatracker.ietf.org/doc/html/rfc4862) — Stateless Address Autoconfiguration
+- [Cisco — IPv6 Configuration Guide](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-16/ip6b-xe-16-book.html) — Cisco IOS IPv6 config
+- [Google IPv6 Statistics](https://www.google.com/intl/en/ipv6/statistics.html) — Real-world IPv6 adoption rates
+- [Jeremy's IT Lab — IPv6 (YouTube)](https://www.youtube.com/watch?v=YR0MoEBjwN4&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ) — Video walkthrough
+
+---
+
 **Next:** [Exercises →](exercises.md)

@@ -395,4 +395,16 @@ Check:
 
 ---
 
+## Sources & Further Reading
+
+- [IEEE 802.1D — Spanning Tree Protocol](https://standards.ieee.org/ieee/802.1D/6091/) — Original STP standard
+- [IEEE 802.1w — Rapid Spanning Tree Protocol](https://standards.ieee.org/ieee/802.1w/1866/) — RSTP specification
+- [Cisco — STP Configuration Guide](https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/lyr2/b_173_lyr2_9300_cg/configuring_spanning_tree_protocol.html) — STP/RSTP on Catalyst switches
+- [Cisco — EtherChannel Configuration](https://www.cisco.com/c/en/us/support/docs/lan-switching/etherchannel/12023-4.html) — LACP & PAgP setup
+- [Cisco — Inter-VLAN Routing](https://www.cisco.com/c/en/us/support/docs/lan-switching/inter-vlan-routing/41860-howto-L3-interVLAN.html) — Router-on-a-stick & L3 switch SVIs
+- [Practical Networking — Spanning Tree](https://www.practicalnetworking.net/stand-alone/spanning-tree-protocol/) — Visual STP explanation
+- [Jeremy's IT Lab — STP (YouTube)](https://www.youtube.com/watch?v=japdEY1UKe4&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ) — Video walkthrough
+
+---
+
 **Next:** [Exercises →](exercises.md)

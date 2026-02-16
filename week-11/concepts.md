@@ -440,4 +440,16 @@ You will see `show` command output on the exam and must interpret it. Know these
 
 ---
 
+## Sources & Further Reading
+
+- [Cisco CCNA 200-301 Exam Topics](https://learningnetwork.cisco.com/s/ccna-exam-topics) — Official exam blueprint (review all domains)
+- [Cisco Learning Network — CCNA Study Group](https://learningnetwork.cisco.com/s/topic/0TO3i000000yEbsGAE/ccna-certification-community) — Community Q&A and tips
+- [Boson ExSim for CCNA](https://www.boson.com/practice-exam/200-301-cisco-ccna-practice-exam) — High-quality practice exams
+- [Pearson CCNA Practice Tests](https://www.ciscopress.com/store/ccna-200-301-official-cert-guide-library-9781587147142) — Official cert guide practice exams
+- [Subnetting Practice — subnettingpractice.com](https://subnettingpractice.com/) — Timed subnetting drills
+- [Practical Networking — Full Course Index](https://www.practicalnetworking.net/) — Review any weak topic
+- [Jeremy's IT Lab — Full CCNA Playlist (YouTube)](https://www.youtube.com/playlist?list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ) — Revisit any concept
+
+---
+
 **→ Continue to [Exercises](exercises.md) for timed practice exams and lab rebuilds.**

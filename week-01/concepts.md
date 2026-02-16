@@ -314,4 +314,17 @@ So the final frame looks like: `[Ethernet Header][IP Header][TCP Header][Data][F
 
 ---
 
+## Sources & Further Reading
+
+- [Cisco CCNA 200-301 Exam Topics](https://learningnetwork.cisco.com/s/ccna-exam-topics) — Official exam blueprint
+- [Cisco — OSI Model](https://www.cisco.com/c/en/us/products/switches/what-is-the-osi-model.html) — Cisco's overview of the OSI model
+- [RFC 1122 — Requirements for Internet Hosts](https://datatracker.ietf.org/doc/html/rfc1122) — TCP/IP Host requirements
+- [RFC 793 — Transmission Control Protocol](https://datatracker.ietf.org/doc/html/rfc793) — TCP specification
+- [RFC 768 — User Datagram Protocol](https://datatracker.ietf.org/doc/html/rfc768) — UDP specification
+- [RFC 792 — ICMP](https://datatracker.ietf.org/doc/html/rfc792) — Internet Control Message Protocol
+- [Practical Networking — OSI Model](https://www.practicalnetworking.net/series/packet-traveling/osi-model/) — Excellent visual walkthrough
+- [Jeremy's IT Lab — CCNA Free Course (YouTube)](https://www.youtube.com/playlist?list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ) — Full CCNA video series
+
+---
+
 **Next:** [Exercises →](exercises.md)

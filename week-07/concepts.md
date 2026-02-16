@@ -378,4 +378,18 @@ show logging                                ← current logging config and buffe
 
 ---
 
+## Sources & Further Reading
+
+- [RFC 2131 — DHCP](https://datatracker.ietf.org/doc/html/rfc2131) — Dynamic Host Configuration Protocol specification
+- [RFC 1035 — DNS](https://datatracker.ietf.org/doc/html/rfc1035) — Domain Name System specification
+- [RFC 3022 — NAT](https://datatracker.ietf.org/doc/html/rfc3022) — Network Address Translation
+- [RFC 5905 — NTP v4](https://datatracker.ietf.org/doc/html/rfc5905) — Network Time Protocol
+- [RFC 3416 — SNMPv2](https://datatracker.ietf.org/doc/html/rfc3416) — Simple Network Management Protocol
+- [RFC 5424 — Syslog Protocol](https://datatracker.ietf.org/doc/html/rfc5424) — Syslog message format
+- [Cisco — DHCP Configuration Guide](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book.html) — IOS DHCP server/relay config
+- [Cisco — NAT Configuration Guide](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book.html) — Static NAT, dynamic NAT, PAT
+- [Jeremy's IT Lab — DHCP & DNS (YouTube)](https://www.youtube.com/watch?v=FZZ-gDibfoc&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ) — Video walkthrough
+
+---
+
 **Next → [Week 7 Exercises](exercises.md)**

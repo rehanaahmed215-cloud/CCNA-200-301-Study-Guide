@@ -415,4 +415,16 @@ show ip arp inspection interfaces
 
 ---
 
+## Sources & Further Reading
+
+- [Cisco — ACL Configuration Guide](https://www.cisco.com/c/en/us/support/docs/security/ios-firewall/23602-confaccesslists.html) — Standard & extended ACL reference
+- [Cisco — Configuring SSH on Routers/Switches](https://www.cisco.com/c/en/us/support/docs/security-vpn/secure-shell-ssh/4145-ssh.html) — SSH setup guide
+- [Cisco — Port Security Configuration](https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst2960x/software/15-2_7_e/security/configuration_guide/b_sec_2960x_cg/b_sec_152ex_2960-x_cg_chapter_01000.html) — Port security on Catalyst switches
+- [Cisco — DHCP Snooping](https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst2960x/software/15-2_7_e/security/configuration_guide/b_sec_2960x_cg/b_sec_152ex_2960-x_cg_chapter_01001.html) — DHCP snooping & DAI
+- [NIST — Cybersecurity Framework](https://www.nist.gov/cyberframework) — Security fundamentals reference
+- [Practical Networking — ACLs](https://www.practicalnetworking.net/stand-alone/cisco-acls/) — Visual ACL explanation
+- [Jeremy's IT Lab — Security Fundamentals (YouTube)](https://www.youtube.com/watch?v=HxLguft0pDI&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ) — Video walkthrough
+
+---
+
 **Next → [Week 8 Exercises](exercises.md)**

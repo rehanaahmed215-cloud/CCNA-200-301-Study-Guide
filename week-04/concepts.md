@@ -313,4 +313,15 @@ switchport trunk allowed vlan 10,20,30
 
 ---
 
+## Sources & Further Reading
+
+- [IEEE 802.3 — Ethernet Standard](https://standards.ieee.org/ieee/802.3/10422/) — Official Ethernet specification
+- [IEEE 802.1Q — VLAN Tagging](https://standards.ieee.org/ieee/802.1Q/10323/) — VLAN trunk standard
+- [Cisco — VLAN Configuration Guide](https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst2960x/software/15-2_7_e/vlan/configuration_guide/b_vlan_2960x_cg.html) — Cisco switch VLAN config
+- [Cisco — Understanding VLANs](https://www.cisco.com/c/en/us/support/docs/lan-switching/inter-vlan-routing/10023-3.html) — VLAN concepts and design
+- [Practical Networking — VLANs](https://www.practicalnetworking.net/stand-alone/vlans/) — Visual VLAN explanation
+- [Jeremy's IT Lab — VLANs (YouTube)](https://www.youtube.com/watch?v=WJ7yE1sQDJk&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ) — Video walkthrough
+
+---
+
 **Next:** [Exercises →](exercises.md)

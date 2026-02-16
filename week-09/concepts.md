@@ -306,4 +306,15 @@ Use a honeycomb pattern to ensure no adjacent APs share the same channel.
 
 ---
 
+## Sources & Further Reading
+
+- [IEEE 802.11 — Wireless LAN Standard](https://standards.ieee.org/ieee/802.11/7028/) — Official Wi-Fi specification
+- [Wi-Fi Alliance](https://www.wi-fi.org/) — Wi-Fi 4/5/6/6E naming and certification
+- [Cisco — Wireless LAN Controller Configuration Guide](https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/config-guide/b_wl_16_10_cg.html) — Cisco WLC setup
+- [Cisco — Wireless LAN Design Guide](https://www.cisco.com/c/en/us/solutions/enterprise-networks/802-11ax-solution/nb-06-702cq-wireless-design-guide-cte-en.html) — WLAN design best practices
+- [Cisco — Understanding WPA/WPA2/WPA3](https://www.cisco.com/c/en/us/support/docs/wireless-mobility/wlan-security/213232-wpa-wpa2-wpa3.html) — Wireless security standards
+- [Jeremy's IT Lab — Wireless (YouTube)](https://www.youtube.com/watch?v=nMFhKRqJZjY&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ) — Video walkthrough
+
+---
+
 **Next → [Week 9 Exercises](exercises.md)**
